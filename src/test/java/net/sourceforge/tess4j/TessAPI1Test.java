@@ -579,6 +579,8 @@ public class TessAPI1Test {
         System.out.println("TessResultRenderer");
         String image = String.format("%s/%s", this.testResourcesDataPath, "eurotext.tif");
         String output = "capi-test.txt";
+        String outFile = "renderer1";
+        String folder = "target/test-classes/test-results";
         int set_only_init_params = TessAPI.FALSE;
         int oem = TessAPI.TessOcrEngineMode.OEM_DEFAULT;
         PointerByReference configs = null;
@@ -635,7 +637,7 @@ public class TessAPI1Test {
                 byte[] bytes = data.getValue().getByteArray(0, length);
                 FileOutputStream bw = null;
                 try {
-                    File file = new File("target/test-classes/test-results/renderer1." + ext);
+                    File file = new File(folder, outFile + "." + ext);
                     bw = new FileOutputStream(file);
                     bw.write(bytes);
                 } catch (IOException e) {
@@ -648,7 +650,8 @@ public class TessAPI1Test {
             }
         }
 
-//        TessAPI1.TessDeleteResultRenderer(renderer);
+        TessAPI1.TessDeleteResultRenderer(renderer);
+        assertTrue(new File(folder, outFile + ".pdf").exists());
     }
 
     /**

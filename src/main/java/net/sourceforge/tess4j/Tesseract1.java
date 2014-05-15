@@ -456,6 +456,9 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
             }
         }
         
+        TessDeleteResultRenderer(renderer);
+        dispose();
+        
         return map;
     }
 

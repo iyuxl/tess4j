@@ -469,6 +469,9 @@ public class Tesseract implements ITesseract {
             }
         }
         
+        api.TessDeleteResultRenderer(renderer);
+        dispose();
+
         return map;
     }
 
