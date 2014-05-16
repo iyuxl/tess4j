@@ -162,20 +162,20 @@ public interface ITesseract {
     /**
      * Gets renderer output in form of byte arrays.
      * 
-     * @param image  input image
+     * @param imageFilename  input image
      * @param formats types of renderers
      * @return output byte arrays
      */
-    Map<String, byte[]> getRendererOutput(String image, List<RenderedFormat> formats);
+    Map<String, byte[]> getRendererOutput(String imageFilename, List<RenderedFormat> formats);
     
     /**
      * Creates documents for given renderers.
      * 
-     * @param image input image
+     * @param imageFilename input image
      * @param outputPrefix filename without extension
      * @param outputFolder output folder
      * @param formats types of renderers
      * @throws IOException 
      */
-    void createDocuments(String image, String outputPrefix, String outputFolder, List<RenderedFormat> formats) throws IOException;
+    void createDocuments(String imageFilename, String outputPrefix, String outputFolder, List<RenderedFormat> formats) throws IOException;
 }

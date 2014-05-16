@@ -26,6 +26,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.logging.*;
 import javax.imageio.IIOImage;
+import net.sourceforge.vietocr.Utilities;
 
 /**
  * An object layer on top of <code>TessAPI1</code>, provides character
@@ -132,6 +133,7 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Returns API handle.
+     *
      * @return handle
      */
     protected TessBaseAPI getHandle() {
@@ -335,9 +337,9 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Creates renderers for given formats.
-     * 
+     *
      * @param formats
-     * @return 
+     * @return
      */
     private TessResultRenderer createRenderers(List<RenderedFormat> formats) {
         TessResultRenderer renderer = null;
@@ -388,60 +390,51 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Creates documents for given renderers.
-     * 
-     * @param image input image
+     *
+     * @param imageFilename input image
      * @param outputPrefix filename without extension
      * @param outputFolder output folder
      * @param formats types of renders
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
-    public void createDocuments(String image, String outputPrefix, String outputFolder, List<RenderedFormat> formats) throws IOException {
-        Map<String, byte[]> map = getRendererOutput(image, formats);
+    public void createDocuments(String imageFilename, String outputPrefix, String outputFolder, List<RenderedFormat> formats) throws IOException {
+        Map<String, byte[]> map = getRendererOutput(imageFilename, formats);
 
         for (Map.Entry<String, byte[]> entry : map.entrySet()) {
             String key = entry.getKey();
             byte[] value = entry.getValue();
-
-            FileOutputStream bw = null;
-
+            File file = new File(outputFolder, outputPrefix + "." + key);
             try {
-                File file = new File(outputFolder, outputPrefix + "." + key);
-                bw = new FileOutputStream(file);
-                bw.write(value);
+                Utilities.writeFile(value, file);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage(), e);
-            } finally {
-                if (bw != null) {
-                    bw.close();
-                }
             }
         }
     }
-    
+
     /**
      * Gets renderer output in form of byte arrays.
-     * 
-     * @param image  input image
+     *
+     * @param imageFilename input image
      * @param formats types of renderers
      * @return output byte arrays
      */
     @Override
-    public Map<String, byte[]> getRendererOutput(String image, List<RenderedFormat> formats) {
+    public Map<String, byte[]> getRendererOutput(String imageFilename, List<RenderedFormat> formats) {
         init();
         setTessVariables();
 
         TessResultRenderer renderer = createRenderers(formats);
 
-        int result = TessBaseAPIProcessPages1(handle, image, null, 0, renderer);
+        int result = TessBaseAPIProcessPages1(handle, imageFilename, null, 0, renderer);
 
 //        if (result != TessAPI.FALSE) {
 //            System.err.println("Error during processing.");
 //            return;
 //        }
-        
-        Map<String, byte[]> map = new HashMap<String, byte[]>();     
-        
+        Map<String, byte[]> map = new HashMap<String, byte[]>();
+
         for (; renderer != null; renderer = TessResultRendererNext(renderer)) {
             String ext = TessResultRendererExtention(renderer).getString(0);
 
@@ -455,10 +448,10 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
                 map.put(ext, bytes);
             }
         }
-        
+
         TessDeleteResultRenderer(renderer);
         dispose();
-        
+
         return map;
     }
 

@@ -17,7 +17,7 @@ package net.sourceforge.tess4j;
 
 import com.ochafik.lang.jnaerator.runtime.NativeSize;
 import net.sourceforge.vietocr.ImageIOHelper;
-import net.sourceforge.tess4j.utiltities.TestUtilities;
+import net.sourceforge.vietocr.Utilities;
 import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
 import com.sun.jna.ptr.IntByReference;
@@ -439,16 +439,16 @@ public class TessAPI1Test {
         TessAPI1.TessBaseAPIInit3(handle, datapath, language);
         TessAPI1.TessBaseAPISetPageSegMode(handle, expResult);
         int actualResult = TessAPI1.TessBaseAPIGetPageSegMode(handle);
-        System.out.println("PSM: " + TestUtilities.getConstantName(actualResult, TessAPI1.TessPageSegMode.class));
+        System.out.println("PSM: " + Utilities.getConstantName(actualResult, TessAPI1.TessPageSegMode.class));
         TessAPI1.TessBaseAPISetImage(handle, buf, image.getWidth(), image.getHeight(), bytespp, bytespl);
         int success = TessAPI1.TessBaseAPIRecognize(handle, null);
         if (success == 0) {
             TessAPI1.TessPageIterator pi = TessAPI1.TessBaseAPIAnalyseLayout(handle);
             TessAPI1.TessPageIteratorOrientation(pi, orientation, direction, order, deskew_angle);
             System.out.println(String.format("Orientation: %s\nWritingDirection: %s\nTextlineOrder: %s\nDeskew angle: %.4f\n",
-                TestUtilities.getConstantName(orientation.get(), TessOrientation.class), 
-                TestUtilities.getConstantName(direction.get(), TessWritingDirection.class), 
-                TestUtilities.getConstantName(order.get(), TessTextlineOrder.class), 
+                Utilities.getConstantName(orientation.get(), TessOrientation.class), 
+                Utilities.getConstantName(direction.get(), TessWritingDirection.class), 
+                Utilities.getConstantName(order.get(), TessTextlineOrder.class), 
                 deskew_angle.get()));
         }
         

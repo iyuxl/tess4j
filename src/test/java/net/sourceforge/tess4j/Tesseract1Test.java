@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.imageio.IIOImage;
 import net.sourceforge.tess4j.ITesseract.RenderedFormat;
-import net.sourceforge.tess4j.utiltities.TestUtilities;
+import net.sourceforge.vietocr.Utilities;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -151,11 +151,11 @@ public class Tesseract1Test {
     @Test
     public void testCreateDocuments() throws Exception {
         System.out.println("createDocuments on an image");
-        String imageFile = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
+        String imageFilename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
         String outFile = "docrenderer1";
         String folder = "target/test-classes/test-results";
         List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT));
-        instance.createDocuments(imageFile, outFile, folder, formats);
+        instance.createDocuments(imageFilename, outFile, folder, formats);
         assertTrue(new File(folder, outFile + ".pdf").exists());
     }
 
@@ -173,7 +173,7 @@ public class Tesseract1Test {
         
         Tess1Extension instance1 = new Tess1Extension();
         int pageIteratorLevel = TessAPI1.TessPageIteratorLevel.RIL_WORD;
-        System.out.println("PageIteratorLevel: " + TestUtilities.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
+        System.out.println("PageIteratorLevel: " + Utilities.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
         instance1.setDatapath(this.datapath);
         List<Word> result = instance1.getTextElements(imageFile, pageIteratorLevel);
         

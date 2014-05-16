@@ -144,11 +144,11 @@ public class TesseractTest {
     @Test
     public void testCreateDocuments() throws Exception {
         System.out.println("createDocuments on an image");
-        String imageFile = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
+        String imageFilename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
         String outFile = "docrenderer";
         String folder = "target/test-classes/test-results";
         List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT));
-        instance.createDocuments(imageFile, outFile, folder, formats);
+        instance.createDocuments(imageFilename, outFile, folder, formats);
         assertTrue(new File(folder, outFile + ".pdf").exists());
     }
 }
