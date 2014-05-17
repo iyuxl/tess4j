@@ -15,7 +15,7 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.vietocr.ImageIOHelper;
+import net.sourceforge.vietocr.util.ImageIOHelper;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.logging.*;
 import javax.imageio.IIOImage;
 import net.sourceforge.tess4j.TessAPI.TessResultRenderer;
-import net.sourceforge.vietocr.Utilities;
+import net.sourceforge.vietocr.util.Utils;
 
 /**
  * An object layer on top of <code>TessAPI</code>, provides character
@@ -418,7 +418,7 @@ public class Tesseract implements ITesseract {
             byte[] value = entry.getValue();
             File file = new File(outputFolder, outputPrefix + "." + key);
             try {
-                Utilities.writeFile(value, file);
+                Utils.writeFile(value, file);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage(), e);
             }

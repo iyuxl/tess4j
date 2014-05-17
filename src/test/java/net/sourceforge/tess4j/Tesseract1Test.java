@@ -15,8 +15,8 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.vietocr.ImageHelper;
-import net.sourceforge.vietocr.ImageIOHelper;
+import net.sourceforge.vietocr.util.ImageHelper;
+import net.sourceforge.vietocr.util.ImageIOHelper;
 import com.recognition.software.jdeskew.ImageDeskew;
 import com.sun.jna.Pointer;
 import javax.imageio.ImageIO;
@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.imageio.IIOImage;
 import net.sourceforge.tess4j.ITesseract.RenderedFormat;
-import net.sourceforge.vietocr.Utilities;
+import net.sourceforge.vietocr.util.Utils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -173,7 +173,7 @@ public class Tesseract1Test {
         
         Tess1Extension instance1 = new Tess1Extension();
         int pageIteratorLevel = TessAPI1.TessPageIteratorLevel.RIL_WORD;
-        System.out.println("PageIteratorLevel: " + Utilities.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
+        System.out.println("PageIteratorLevel: " + Utils.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
         instance1.setDatapath(this.datapath);
         List<Word> result = instance1.getTextElements(imageFile, pageIteratorLevel);
         

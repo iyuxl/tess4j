@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sourceforge.vietocr;
+package net.sourceforge.vietocr.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class Utilities {
+public class Utils {
 
     /**
      * Writes byte array to file.
@@ -65,5 +65,30 @@ public class Utilities {
             }
         }
         return String.valueOf(value);
+    }
+        
+    /**
+     * Gets filename without extension.
+     * http://stackoverflow.com/questions/924394/how-to-get-file-name-without-the-extension
+     *
+     * @param str
+     * @return
+     */
+    public static String stripExtension(String str) {
+        // Handle null case specially.
+        if (str == null) {
+            return null;
+        }
+
+        // Get position of last '.'.
+        int pos = str.lastIndexOf(".");
+
+        // If there wasn't any '.' just return the string as is.
+        if (pos == -1) {
+            return str;
+        }
+
+        // Otherwise return the string, up to the dot.
+        return str.substring(0, pos);
     }
 }
