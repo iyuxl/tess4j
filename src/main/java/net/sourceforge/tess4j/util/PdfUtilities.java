@@ -27,12 +27,12 @@ public class PdfUtilities {
     private final static Logger logger = Logger.getLogger(PdfUtilities.class.getName());
 
     /**
-     * Convert PDF to TIFF format.
+     * Converts PDF to TIFF format.
      *
      * @param inputPdfFile
      * @return a multi-page TIFF image
      */
-    public static File convertPdf2Tiff(File inputPdfFile) throws IOException  {
+    public static File convertPdf2Tiff(File inputPdfFile) throws IOException {
         File[] pngFiles = null;
 
         try {
@@ -57,7 +57,7 @@ public class PdfUtilities {
     }
 
     /**
-     * Convert PDF to PNG format.
+     * Converts PDF to PNG format.
      *
      * @param inputPdfFile
      * @return an array of PNG images
@@ -110,12 +110,12 @@ public class PdfUtilities {
                 return f1.getName().compareTo(f2.getName());
             }
         });
-        
+
         return workingFiles;
     }
 
     /**
-     * Split PDF.
+     * Splits PDF.
      * @param inputPdfFile
      * @param outputPdfFile
      * @param firstPage
@@ -161,7 +161,7 @@ public class PdfUtilities {
     }
 
     /**
-     * Get PDF Page Count.
+     * Gets PDF Page Count.
      *
      * @param inputPdfFile
      * @return number of pages
@@ -200,6 +200,27 @@ public class PdfUtilities {
 
         return pageCount;
     }
+
+//    /**
+//     * Gets PDF Page Count using Ghost4J's new high-level API available in Ghost4J 0.4.0.
+//     * (Taken out due to many required additional libraries.)
+//     *
+//     * @param inputPdfFile
+//     * @return number of pages
+//     */
+//    public static int getPdfPageCount1(String inputPdfFile) {
+//        int pageCount = 0;
+//
+//        try {
+//            // load PDF document
+//            PDFDocument document = new PDFDocument();
+//            document.load(new File(inputPdfFile));
+//            pageCount = document.getPageCount();
+//        } catch (Exception e) {
+//            System.out.println("ERROR: " + e.getMessage());
+//        }
+//        return pageCount;
+//    }
 
     /**
      * Merge PDF files.
