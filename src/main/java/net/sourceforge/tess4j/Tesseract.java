@@ -15,7 +15,7 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.vietocr.util.ImageIOHelper;
+import net.sourceforge.tess4j.util.ImageIOHelper;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.logging.*;
 import javax.imageio.IIOImage;
 import net.sourceforge.tess4j.TessAPI.TessResultRenderer;
-import net.sourceforge.vietocr.util.Utils;
+import net.sourceforge.tess4j.util.Utils;
 
 /**
  * An object layer on top of <code>TessAPI</code>, provides character

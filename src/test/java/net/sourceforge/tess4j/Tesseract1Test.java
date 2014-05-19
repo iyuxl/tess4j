@@ -15,8 +15,8 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.vietocr.util.ImageHelper;
-import net.sourceforge.vietocr.util.ImageIOHelper;
+import net.sourceforge.tess4j.util.ImageHelper;
+import net.sourceforge.tess4j.util.ImageIOHelper;
 import com.recognition.software.jdeskew.ImageDeskew;
 import com.sun.jna.Pointer;
 import javax.imageio.ImageIO;
@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.imageio.IIOImage;
 import net.sourceforge.tess4j.ITesseract.RenderedFormat;
-import net.sourceforge.vietocr.util.Utils;
+import net.sourceforge.tess4j.util.Utils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

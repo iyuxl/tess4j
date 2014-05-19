@@ -16,8 +16,8 @@
 package net.sourceforge.tess4j;
 
 import com.ochafik.lang.jnaerator.runtime.NativeSize;
-import net.sourceforge.vietocr.util.ImageIOHelper;
-import net.sourceforge.vietocr.util.Utils;
+import net.sourceforge.tess4j.util.ImageIOHelper;
+import net.sourceforge.tess4j.util.Utils;
 import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
 import com.sun.jna.ptr.IntByReference;

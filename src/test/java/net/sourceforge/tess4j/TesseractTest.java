@@ -15,8 +15,8 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.vietocr.util.ImageHelper;
-import net.sourceforge.vietocr.util.ImageIOHelper;
+import net.sourceforge.tess4j.util.ImageHelper;
+import net.sourceforge.tess4j.util.ImageIOHelper;
 import com.recognition.software.jdeskew.ImageDeskew;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
