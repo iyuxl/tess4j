@@ -15,6 +15,7 @@
  */
 package net.sourceforge.tess4j;
 
+import net.sourceforge.tess4j.util.Utils;
 import net.sourceforge.tess4j.util.ImageIOHelper;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -27,7 +28,6 @@ import java.util.*;
 import java.util.logging.*;
 import javax.imageio.IIOImage;
 import net.sourceforge.tess4j.TessAPI.TessResultRenderer;
-import net.sourceforge.tess4j.util.Utils;
 
 /**
  * An object layer on top of <code>TessAPI</code>, provides character
@@ -119,23 +119,13 @@ public class Tesseract implements ITesseract {
     }
 
     /**
-     * Sets rendered format.
+     * Enables hocr output.
      *
-     * @param renderedFormat the renderedFormat to set
+     * @param hocr to enable or disable hocr output
      */
-    @Override
-    public void setRenderedFormat(RenderedFormat renderedFormat) {
-        this.renderedFormat = renderedFormat;
-//        if (renderedFormat == RenderedFormat.HOCR) {
-//            prop.setProperty("tessedit_create_hocr", "1");
-//        } else if (renderedFormat == RenderedFormat.PDF) {
-//            prop.setProperty("tessedit_create_pdf", "1");
-//            prop.setProperty("tessedit_pageseg_mode", "1");
-//        } else if (renderedFormat == RenderedFormat.UNLV) {
-//            prop.setProperty("tessedit_write_unlv", "1");
-//        } else if (renderedFormat == RenderedFormat.BOX) {
-//            prop.setProperty("tessedit_create_boxfile", "1");
-//        }
+    public void setHocr(boolean hocr) {
+        this.renderedFormat = hocr? RenderedFormat.HOCR : RenderedFormat.TEXT;
+        prop.setProperty("tessedit_create_hocr", hocr ? "1" : "0");
     }
 
     /**
@@ -404,20 +394,20 @@ public class Tesseract implements ITesseract {
      * Creates documents for given renderers.
      *
      * @param imageFilename input image
-     * @param outputPrefix filename without extension
+     * @param outputPrefix output filename without extension
      * @param outputFolder output folder
      * @param formats types of renderers
-     * @throws IOException
      */
     @Override
-    public void createDocuments(String imageFilename, String outputPrefix, String outputFolder, List<RenderedFormat> formats) throws IOException {
+    public void createDocuments(String imageFilename, String outputPrefix, String outputFolder, List<RenderedFormat> formats) {
         Map<String, byte[]> map = getRendererOutput(imageFilename, formats);
         
         for (Map.Entry<String, byte[]> entry : map.entrySet()) {
             String key = entry.getKey();
             byte[] value = entry.getValue();
-            File file = new File(outputFolder, outputPrefix + "." + key);
+
             try {
+                File file = new File(outputFolder, outputPrefix + "." + key);
                 Utils.writeFile(value, file);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage(), e);

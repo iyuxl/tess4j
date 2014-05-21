@@ -19,7 +19,6 @@ package net.sourceforge.tess4j;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
@@ -135,13 +134,6 @@ public interface ITesseract {
     void setOcrEngineMode(int ocrEngineMode);
 
     /**
-     * Sets rendered format.
-     *
-     * @param renderedFormat the renderedFormat to set
-     */
-    void setRenderedFormat(RenderedFormat renderedFormat);
-
-    /**
      * Sets page segmentation mode.
      *
      * @param mode the page segmentation mode to set
@@ -175,7 +167,6 @@ public interface ITesseract {
      * @param outputPrefix filename without extension
      * @param outputFolder output folder
      * @param formats types of renderers
-     * @throws IOException 
      */
-    void createDocuments(String imageFilename, String outputPrefix, String outputFolder, List<RenderedFormat> formats) throws IOException;
+    void createDocuments(String imageFilename, String outputPrefix, String outputFolder, List<RenderedFormat> formats);
 }
