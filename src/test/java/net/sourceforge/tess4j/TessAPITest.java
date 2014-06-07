@@ -558,8 +558,6 @@ public class TessAPITest {
         System.out.println("TessResultRenderer");
         String image = String.format("%s/%s", this.testResourcesDataPath, "eurotext.tif");
         String output = "capi-test.txt";
-        String outFile = "renderer";
-        String folder = "target/test-classes/test-results";
         int set_only_init_params = TessAPI.FALSE;
         int oem = TessAPI.TessOcrEngineMode.OEM_DEFAULT;
         PointerByReference configs = null;
@@ -584,7 +582,7 @@ public class TessAPITest {
             return;
         }
 
-        String outputbase = "test/test-results/outputbase";
+        String outputbase = "target/test-classes/test-results/outputbase";
         TessResultRenderer renderer = api.TessHOcrRendererCreate(outputbase);
         api.TessResultRendererInsert(renderer, api.TessBoxTextRendererCreate(outputbase));
         api.TessResultRendererInsert(renderer, api.TessTextRendererCreate(outputbase));
