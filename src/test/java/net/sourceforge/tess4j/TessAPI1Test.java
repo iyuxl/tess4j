@@ -15,7 +15,6 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.tess4j.util.Utils;
 import com.ochafik.lang.jnaerator.runtime.NativeSize;
 import net.sourceforge.tess4j.util.ImageIOHelper;
 import net.sourceforge.tess4j.util.Utils;

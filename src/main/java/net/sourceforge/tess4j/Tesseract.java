@@ -15,11 +15,8 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.tess4j.util.Utils;
 import net.sourceforge.tess4j.util.ImageIOHelper;
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
 import java.awt.Rectangle;
 import java.awt.image.*;
 import java.io.*;
@@ -424,12 +421,25 @@ public class Tesseract implements ITesseract {
 
         try {
             for (int i = 0; i < filenames.length; i++) {
+                File workingTiffFile = null;
                 try {
+                    String filename = filenames[i];
+                    
+                    // if PDF, convert to multi-page TIFF
+                    if (filename.toLowerCase().endsWith(".pdf")) {
+                        workingTiffFile = PdfUtilities.convertPdf2Tiff(new File(filename));
+                        filename = workingTiffFile.getPath();
+                    }
+                    
                     TessResultRenderer renderer = createRenderers(outputbases[i], formats);
-                    createDocuments(filenames[i], renderer);
-                } catch (TesseractException e) {
+                    createDocuments(filename, renderer);
+                } catch (Exception e) {
                     // skip the problematic image file
                     logger.log(Level.SEVERE, e.getMessage(), e);
+                } finally {
+                    if (workingTiffFile != null && workingTiffFile.exists()) {
+                        workingTiffFile.delete();
+                    }
                 }
             }
         } finally {
@@ -445,26 +455,10 @@ public class Tesseract implements ITesseract {
      * @throws TesseractException
      */
     private void createDocuments(String filename, TessResultRenderer renderer) throws TesseractException {
-        File workingTiffFile = null;
+        int result = api.TessBaseAPIProcessPages(handle, filename, null, 0, renderer);
 
-        try {
-            // convert PDF to TIFF
-            if (filename.toLowerCase().endsWith(".pdf")) {
-                workingTiffFile = PdfUtilities.convertPdf2Tiff(new File(filename));
-                filename = workingTiffFile.getPath();
-            }
-            
-            int result = api.TessBaseAPIProcessPages(handle, filename, null, 0, renderer);
-
-            if (result != TessAPI.TRUE) {
-                throw new TesseractException("Error during processing.");
-            }
-        } catch (IOException e) {
-            throw new TesseractException(e);
-        } finally {
-            if (workingTiffFile != null && workingTiffFile.exists()) {
-                workingTiffFile.delete();
-            }
+        if (result != TessAPI.TRUE) {
+            throw new TesseractException("Error during processing.");
         }
     }
 

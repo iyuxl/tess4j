@@ -31,12 +31,13 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class TesseractTest {
+
     static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
     Tesseract instance;
-    
+
     private final String datapath = "src/main/resources";
     private final String testResourcesDataPath = "src/test/resources/test-data";
-    
+
     public TesseractTest() {
     }
 
@@ -137,19 +138,19 @@ public class TesseractTest {
         System.out.println(result);
         assertEquals(expResult, result.substring(0, expResult.length()));
     }
-    
+
     /**
      * Test of createDocuments method, of class Tesseract.
      */
     @Test
     public void testCreateDocuments() throws Exception {
-        System.out.println("createDocuments on an image");
-        String imageFile1 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.pdf");  
-        String imageFile2 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.tif");
+        System.out.println("createDocuments for image");
+        String imageFile1 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.pdf");
+        String imageFile2 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
         String outputbase1 = "target/test-classes/test-results/docrenderer";
         String outputbase2 = "target/test-classes/test-results/docrenderer2";
         List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT));
-        instance.createDocuments(new String[] {imageFile1,imageFile2}, new String[] {outputbase1, outputbase2}, formats);
+        instance.createDocuments(new String[]{imageFile1, imageFile2}, new String[]{outputbase1, outputbase2}, formats);
         assertTrue(new File(outputbase1 + ".pdf").exists());
     }
 }

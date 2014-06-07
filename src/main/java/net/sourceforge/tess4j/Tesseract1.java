@@ -15,11 +15,8 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.tess4j.util.Utils;
 import net.sourceforge.tess4j.util.ImageIOHelper;
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
 import java.awt.Rectangle;
 import java.awt.image.*;
 import java.io.*;
@@ -27,6 +24,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.logging.*;
 import javax.imageio.IIOImage;
+import net.sourceforge.tess4j.util.PdfUtilities;
 
 /**
  * An object layer on top of <code>TessAPI1</code>, provides character
@@ -411,12 +409,25 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
         
         try {
             for (int i = 0; i < filenames.length; i++) {
+                File workingTiffFile = null;
                 try {
+                    String filename = filenames[i];
+                    
+                    // if PDF, convert to multi-page TIFF
+                    if (filename.toLowerCase().endsWith(".pdf")) {
+                        workingTiffFile = PdfUtilities.convertPdf2Tiff(new File(filename));
+                        filename = workingTiffFile.getPath();
+                    }
+                    
                     TessResultRenderer renderer = createRenderers(outputbases[i], formats);
-                    createDocuments(filenames[i], renderer);
-                } catch (TesseractException e) {
+                    createDocuments(filename, renderer);
+                } catch (Exception e) {
                     // skip the problematic image file
                     logger.log(Level.SEVERE, e.getMessage(), e);
+                } finally {
+                    if (workingTiffFile != null && workingTiffFile.exists()) {
+                        workingTiffFile.delete();
+                    }
                 }
             }
         } finally {
