@@ -247,15 +247,15 @@ public interface TessAPI extends Library {
     void TessDeleteIntArray(IntBuffer arr);
     
     /* Renderer API */
-    TessAPI.TessResultRenderer TessTextRendererCreate();
+    TessAPI.TessResultRenderer TessTextRendererCreate(String outputbase);
 
-    TessAPI.TessResultRenderer TessHOcrRendererCreate();
+    TessAPI.TessResultRenderer TessHOcrRendererCreate(String outputbase);
 
-    TessAPI.TessResultRenderer TessPDFRendererCreate(String datadir);
+    TessAPI.TessResultRenderer TessPDFRendererCreate(String outputbase, String datadir);
 
-    TessAPI.TessResultRenderer TessUnlvRendererCreate();
+    TessAPI.TessResultRenderer TessUnlvRendererCreate(String outputbase);
 
-    TessAPI.TessResultRenderer TessBoxTextRendererCreate();
+    TessAPI.TessResultRenderer TessBoxTextRendererCreate(String outputbase);
 
     void TessDeleteResultRenderer(TessAPI.TessResultRenderer renderer);
 
@@ -267,14 +267,7 @@ public interface TessAPI extends Library {
 
     int TessResultRendererAddImage(TessAPI.TessResultRenderer renderer, PointerByReference api);
 
-    int TessResultRendererAddError(TessAPI.TessResultRenderer renderer, PointerByReference api);
-
     int TessResultRendererEndDocument(TessAPI.TessResultRenderer renderer);
-
-//    int TessResultRendererGetOutput(TessAPI.TessResultRenderer renderer, String data[], IntBuffer data_len);
-    int TessResultRendererGetOutput(TessAPI.TessResultRenderer renderer, PointerByReference data, IntByReference data_len);
-
-    Pointer TessResultRendererTypename(TessAPI.TessResultRenderer renderer);
 
     Pointer TessResultRendererExtention(TessAPI.TessResultRenderer renderer);
 
@@ -592,9 +585,7 @@ public interface TessAPI extends Library {
      * for some reason, the page is reprocessed with the retry_config config
      * file. Useful for interactively debugging a bad page.
      */
-    Pointer TessBaseAPIProcessPages(TessAPI.TessBaseAPI handle, String filename, String retry_config, int timeout_millisec);
-
-    int TessBaseAPIProcessPages1(TessAPI.TessBaseAPI handle, String filename, String retry_config, int timeout_millisec, TessAPI.TessResultRenderer renderer);
+    int TessBaseAPIProcessPages(TessAPI.TessBaseAPI handle, String filename, String retry_config, int timeout_millisec, TessAPI.TessResultRenderer renderer);
 
     /**
      * The recognized text is returned as a char* which is coded as UTF-8 and
@@ -731,6 +722,8 @@ public interface TessAPI extends Library {
 
     float TessResultIteratorConfidence(TessAPI.TessResultIterator handle, int level);
 
+    String TessResultIteratorWordRecognitionLanguage(TessAPI.TessResultIterator handle);
+    
     String TessResultIteratorWordFontAttributes(TessAPI.TessResultIterator handle, IntBuffer is_bold, IntBuffer is_italic, IntBuffer is_underlined, IntBuffer is_monospace, IntBuffer is_serif, IntBuffer is_smallcaps, IntBuffer pointsize, IntBuffer font_id);
 
     int TessResultIteratorWordIsFromDictionary(TessAPI.TessResultIterator handle);

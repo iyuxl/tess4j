@@ -15,6 +15,7 @@
  */
 package net.sourceforge.tess4j;
 
+import net.sourceforge.tess4j.util.Utils;
 import net.sourceforge.tess4j.util.ImageHelper;
 import net.sourceforge.tess4j.util.ImageIOHelper;
 import com.recognition.software.jdeskew.ImageDeskew;
@@ -29,7 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 import javax.imageio.IIOImage;
 import net.sourceforge.tess4j.ITesseract.RenderedFormat;
-import net.sourceforge.tess4j.util.Utils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -145,18 +145,20 @@ public class Tesseract1Test {
         System.out.println(result);
         assertEquals(expResult, result.substring(0, expResult.length()));
     }
+
     /**
      * Test of createDocuments method, of class Tesseract.
      */
     @Test
     public void testCreateDocuments() throws Exception {
         System.out.println("createDocuments on an image");
-        String imageFilename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
-        String outFile = "docrenderer1";
-        String folder = "target/test-classes/test-results";
+        String imageFile1 = "eurotext.png";
+        String imageFile2 = "eurotext.tif";
+        String outputbase1 = "target/test-classes/test-results/docrenderer";
+        String outputbase2 = "target/test-classes/test-results/docrenderer2";
         List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT));
-        instance.createDocuments(imageFilename, outFile, folder, formats);
-        assertTrue(new File(folder, outFile + ".pdf").exists());
+        instance.createDocuments(new String[] {imageFile1, imageFile2}, new String[] {outputbase1, outputbase2}, formats);
+        assertTrue(new File(outputbase1 + ".pdf").exists());
     }
 
     /**

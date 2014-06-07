@@ -249,15 +249,15 @@ public class TessAPI1 implements Library {
     public static native void TessDeleteIntArray(IntBuffer arr);
     
     /* Renderer API */
-    public static native TessAPI1.TessResultRenderer TessTextRendererCreate();
+    public static native TessAPI1.TessResultRenderer TessTextRendererCreate(String outputbase);
 
-    public static native TessAPI1.TessResultRenderer TessHOcrRendererCreate();
+    public static native TessAPI1.TessResultRenderer TessHOcrRendererCreate(String outputbase);
 
-    public static native TessAPI1.TessResultRenderer TessPDFRendererCreate(String datadir);
+    public static native TessAPI1.TessResultRenderer TessPDFRendererCreate(String outputbase, String datadir);
 
-    public static native TessAPI1.TessResultRenderer TessUnlvRendererCreate();
+    public static native TessAPI1.TessResultRenderer TessUnlvRendererCreate(String outputbase);
 
-    public static native TessAPI1.TessResultRenderer TessBoxTextRendererCreate();
+    public static native TessAPI1.TessResultRenderer TessBoxTextRendererCreate(String outputbase);
 
     public static native void TessDeleteResultRenderer(TessAPI1.TessResultRenderer renderer);
 
@@ -269,14 +269,7 @@ public class TessAPI1 implements Library {
 
     public static native int TessResultRendererAddImage(TessAPI1.TessResultRenderer renderer, PointerByReference api);
 
-    public static native int TessResultRendererAddError(TessAPI1.TessResultRenderer renderer, PointerByReference api);
-
     public static native int TessResultRendererEndDocument(TessAPI1.TessResultRenderer renderer);
-
-//    public static native int TessResultRendererGetOutput(TessAPI1.TessResultRenderer renderer, String data[], IntBuffer data_len); // throw IllegalArgumentException in JVM 64-bit
-    public static native int TessResultRendererGetOutput(TessAPI1.TessResultRenderer renderer, PointerByReference data, IntByReference data_len);
-
-    public static native Pointer TessResultRendererTypename(TessAPI1.TessResultRenderer renderer);
 
     public static native Pointer TessResultRendererExtention(TessAPI1.TessResultRenderer renderer);
 
@@ -563,9 +556,7 @@ public class TessAPI1 implements Library {
      * page is reprocessed with the retry_config config file. Useful for
      * interactively debugging a bad page.
      */
-    public static native Pointer TessBaseAPIProcessPages(TessAPI1.TessBaseAPI handle, String filename, String retry_config, int timeout_millisec);
-
-    public static native int TessBaseAPIProcessPages1(TessAPI1.TessBaseAPI handle, String filename, String retry_config, int timeout_millisec, TessAPI1.TessResultRenderer renderer);
+    public static native int TessBaseAPIProcessPages(TessAPI1.TessBaseAPI handle, String filename, String retry_config, int timeout_millisec, TessAPI1.TessResultRenderer renderer);
 
     /**
      * The recognized text is returned as a char* which is coded as UTF-8 and
@@ -697,6 +688,8 @@ public class TessAPI1 implements Library {
 
     public static native float TessResultIteratorConfidence(TessAPI1.TessResultIterator handle, int level);
 
+    public static native String TessResultIteratorWordRecognitionLanguage(TessAPI1.TessResultIterator handle);
+    
     public static native String TessResultIteratorWordFontAttributes(TessAPI1.TessResultIterator handle, IntBuffer is_bold, IntBuffer is_italic, IntBuffer is_underlined, IntBuffer is_monospace, IntBuffer is_serif, IntBuffer is_smallcaps, IntBuffer pointsize, IntBuffer font_id);
 
     public static native int TessResultIteratorWordIsFromDictionary(TessAPI1.TessResultIterator handle);

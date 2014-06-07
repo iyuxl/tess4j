@@ -366,34 +366,11 @@ public class TessAPITest {
         String filename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.tif");
         String retry_config = null;
         int timeout_millisec = 0;
+        String outputbase = "target/test-classes/test-results/eurotext";
+        TessResultRenderer renderer = api.TessTextRendererCreate(outputbase);
         api.TessBaseAPIInit3(handle, datapath, language);
-        String expResult = expOCRResult;
-        Pointer utf8Text = api.TessBaseAPIProcessPages(handle, filename, retry_config, timeout_millisec);
-        String result = utf8Text.getString(0);
-        api.TessDeleteText(utf8Text);
-        assertTrue(result.startsWith(expResult));
-    }
-
-    /**
-     * Test of TessBaseAPIProcessPages1 method, of class TessAPI.
-     */
-    @Test
-    public void testTessBaseAPIProcessPages1() {
-        System.out.println("TessBaseAPIProcessPages1");
-        String filename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.tif");
-        String retry_config = null;
-        int timeout_millisec = 0;
-        TessResultRenderer renderer = api.TessTextRendererCreate();
-        api.TessBaseAPIInit3(handle, datapath, language);
-        String expResult = expOCRResult;
-        api.TessBaseAPIProcessPages1(handle, filename, retry_config, timeout_millisec, renderer);
-        PointerByReference data = new PointerByReference();
-        IntByReference dataLength = new IntByReference();
-        api.TessResultRendererGetOutput(renderer, data, dataLength);
-        int length = dataLength.getValue();
-        String result = data.getValue().getString(0);
-        assertTrue(result.startsWith(expResult));
-//        api.TessDeleteResultRenderer(renderer);
+        int rc = api.TessBaseAPIProcessPages(handle, filename, retry_config, timeout_millisec, renderer);
+        assertEquals(TessAPI1.TRUE, rc);
     }
     
     /**
@@ -479,18 +456,19 @@ public class TessAPITest {
         TessAPI.TessPageIterator pi = api.TessResultIteratorGetPageIterator(ri);
         api.TessPageIteratorBegin(pi);
         System.out.println("Bounding boxes:\nchar(s) left top right bottom confidence font-attributes");
-
+        int level = TessAPI.TessPageIteratorLevel.RIL_WORD;
+        
 //        int height = image.getHeight();
         do {
-            Pointer ptr = api.TessResultIteratorGetUTF8Text(ri, TessAPI.TessPageIteratorLevel.RIL_WORD);
+            Pointer ptr = api.TessResultIteratorGetUTF8Text(ri, level);
             String word = ptr.getString(0);
             api.TessDeleteText(ptr);
-            float confidence = api.TessResultIteratorConfidence(ri, TessAPI.TessPageIteratorLevel.RIL_WORD);
+            float confidence = api.TessResultIteratorConfidence(ri, level);
             IntBuffer leftB = IntBuffer.allocate(1);
             IntBuffer topB = IntBuffer.allocate(1);
             IntBuffer rightB = IntBuffer.allocate(1);
             IntBuffer bottomB = IntBuffer.allocate(1);
-            api.TessPageIteratorBoundingBox(pi, TessAPI.TessPageIteratorLevel.RIL_WORD, leftB, topB, rightB, bottomB);
+            api.TessPageIteratorBoundingBox(pi, level, leftB, topB, rightB, bottomB);
             int left = leftB.get();
             int top = topB.get();
             int right = rightB.get();
@@ -519,7 +497,7 @@ public class TessAPITest {
             System.out.println(String.format("  font: %s, size: %d, font id: %d, bold: %b," +
                        " italic: %b, underlined: %b, monospace: %b, serif: %b, smallcap: %b", 
                     fontName, pointSize, fontId, bold, italic, underlined, monospace, serif, smallcaps));
-        } while (api.TessPageIteratorNext(pi, TessAPI.TessPageIteratorLevel.RIL_WORD) == TessAPI.TRUE);
+        } while (api.TessPageIteratorNext(pi, level) == TessAPI.TRUE);
         
         assertTrue(true);
     }
@@ -550,7 +528,7 @@ public class TessAPITest {
         if (ri != null) {
             do {
                 Pointer symbol = api.TessResultIteratorGetUTF8Text(ri, level);
-                float conf = api.TessResultIteratorConfidence(ri, TessAPI.TessPageIteratorLevel.RIL_WORD);
+                float conf = api.TessResultIteratorConfidence(ri, level);
                 if (symbol != null) {
                     System.out.println(String.format("symbol %s, conf: %f", symbol.getString(0), conf));
                     boolean indent = false;
@@ -606,52 +584,30 @@ public class TessAPITest {
             return;
         }
 
-        TessResultRenderer renderer = api.TessHOcrRendererCreate();
-        api.TessResultRendererInsert(renderer, api.TessBoxTextRendererCreate());
-        api.TessResultRendererInsert(renderer, api.TessTextRendererCreate());
+        String outputbase = "test/test-results/outputbase";
+        TessResultRenderer renderer = api.TessHOcrRendererCreate(outputbase);
+        api.TessResultRendererInsert(renderer, api.TessBoxTextRendererCreate(outputbase));
+        api.TessResultRendererInsert(renderer, api.TessTextRendererCreate(outputbase));
         String dataPath = api.TessBaseAPIGetDatapath(handle);
-        api.TessResultRendererInsert(renderer, api.TessPDFRendererCreate(dataPath));
+        api.TessResultRendererInsert(renderer, api.TessPDFRendererCreate(outputbase, dataPath));
 
-        int result = api.TessBaseAPIProcessPages1(handle, image, null, 0, renderer);
+        int result = api.TessBaseAPIProcessPages(handle, image, null, 0, renderer);
         
-//        if (result != TessAPI.FALSE) {
-//            System.err.println("Error during processing.");
-//            return;
-//        }
+        if (result != TessAPI.TRUE) {
+            System.err.println("Error during processing.");
+            return;
+        }
         
         for (; renderer != null; renderer = api.TessResultRendererNext(renderer)) {
-            String typeName = api.TessResultRendererTypename(renderer).getString(0);
             String ext = api.TessResultRendererExtention(renderer).getString(0);
-            System.out.println(String.format("TessResultRendererTypename: %s\nTessResultRendererExtention: %s\nTessResultRendererTitle: %s\nTessResultRendererImageNum: %d", 
-                    typeName,
+            System.out.println(String.format("TessResultRendererExtention: %s\nTessResultRendererTitle: %s\nTessResultRendererImageNum: %d", 
                     ext,
                     api.TessResultRendererTitle(renderer).getString(0),
                     api.TessResultRendererImageNum(renderer)));
-   
-            PointerByReference data = new PointerByReference();
-            IntByReference dataLength = new IntByReference();
-        
-            result = api.TessResultRendererGetOutput(renderer, data, dataLength);
-            if (result != TessAPI.FALSE) {
-                int length = dataLength.getValue();
-                byte[] bytes = data.getValue().getByteArray(0, length);
-                FileOutputStream bw = null;
-                try {
-                    File file = new File(folder, outFile + "." + ext);
-                    bw = new FileOutputStream(file);
-                    bw.write(bytes);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (bw != null) {
-                        bw.close();
-                    }
-                }
-            }
         }
         
         api.TessDeleteResultRenderer(renderer);
-        assertTrue(new File(folder, outFile + ".pdf").exists());
+        assertTrue(new File(outputbase + ".pdf").exists());
     }
 
     /**
@@ -868,14 +824,6 @@ public class TessAPITest {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public Pointer TessBaseAPIProcessPages(TessBaseAPI handle, String filename, String retry_config, int timeout_millisec) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
-        public int TessBaseAPIProcessPages1(TessBaseAPI handle, String filename, String retry_config, int timeout_millisec, TessResultRenderer renderer) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
         public Pointer TessBaseAPIGetUTF8Text(TessBaseAPI handle) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -1000,7 +948,12 @@ public class TessAPITest {
         public float TessResultIteratorConfidence(TessResultIterator handle, int level) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
-
+        
+        @Override
+        public String TessResultIteratorWordRecognitionLanguage(TessResultIterator handle) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+        
         public String TessResultIteratorWordFontAttributes(TessResultIterator handle, IntBuffer is_bold, IntBuffer is_italic, IntBuffer is_underlined, IntBuffer is_monospace, IntBuffer is_serif, IntBuffer is_smallcaps, IntBuffer pointsize, IntBuffer font_id) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -1057,26 +1010,6 @@ public class TessAPITest {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public TessResultRenderer TessTextRendererCreate() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public TessResultRenderer TessHOcrRendererCreate() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public TessResultRenderer TessPDFRendererCreate(String datadir) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public TessResultRenderer TessUnlvRendererCreate() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public TessResultRenderer TessBoxTextRendererCreate() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
         public void TessDeleteResultRenderer(TessResultRenderer renderer) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -1101,19 +1034,7 @@ public class TessAPITest {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public int TessResultRendererAddError(TessResultRenderer renderer, PointerByReference api) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
         public int TessResultRendererEndDocument(TessResultRenderer renderer) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public int TessResultRendererGetOutput(TessResultRenderer renderer, PointerByReference data, IntByReference data_len) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public Pointer TessResultRendererTypename(TessResultRenderer renderer) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1156,7 +1077,7 @@ public class TessAPITest {
         
         @Override
         public void TessChoiceIteratorDelete(TessChoiceIterator handle) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet.");
         }
         
         @Override
@@ -1171,6 +1092,36 @@ public class TessAPITest {
 
         @Override
         public float TessChoiceIteratorConfidence(TessChoiceIterator handle) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public TessResultRenderer TessTextRendererCreate(String outputbase) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public TessResultRenderer TessHOcrRendererCreate(String outputbase) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public TessResultRenderer TessPDFRendererCreate(String outputbase, String datadir) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public TessResultRenderer TessUnlvRendererCreate(String outputbase) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public TessResultRenderer TessBoxTextRendererCreate(String outputbase) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public int TessBaseAPIProcessPages(TessBaseAPI handle, String filename, String retry_config, int timeout_millisec, TessResultRenderer renderer) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }

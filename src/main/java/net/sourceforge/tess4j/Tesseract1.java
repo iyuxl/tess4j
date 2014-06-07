@@ -104,7 +104,7 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
      * @param hocr to enable or disable hocr output
      */
     public void setHocr(boolean hocr) {
-        this.renderedFormat = hocr? RenderedFormat.HOCR : RenderedFormat.TEXT;
+        this.renderedFormat = hocr ? RenderedFormat.HOCR : RenderedFormat.TEXT;
         prop.setProperty("tessedit_create_hocr", hocr ? "1" : "0");
     }
 
@@ -328,48 +328,49 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
     /**
      * Creates renderers for given formats.
      *
+     * @param outputbase
      * @param formats
      * @return
      */
-    private TessResultRenderer createRenderers(List<RenderedFormat> formats) {
+    private TessResultRenderer createRenderers(String outputbase, List<RenderedFormat> formats) {
         TessResultRenderer renderer = null;
 
         for (RenderedFormat format : formats) {
             switch (format) {
                 case TEXT:
                     if (renderer == null) {
-                        renderer = TessTextRendererCreate();
+                        renderer = TessTextRendererCreate(outputbase);
                     } else {
-                        TessResultRendererInsert(renderer, TessTextRendererCreate());
+                        TessResultRendererInsert(renderer, TessTextRendererCreate(outputbase));
                     }
                     break;
                 case HOCR:
                     if (renderer == null) {
-                        renderer = TessHOcrRendererCreate();
+                        renderer = TessHOcrRendererCreate(outputbase);
                     } else {
-                        TessResultRendererInsert(renderer, TessHOcrRendererCreate());
+                        TessResultRendererInsert(renderer, TessHOcrRendererCreate(outputbase));
                     }
                     break;
                 case PDF:
                     String dataPath = TessBaseAPIGetDatapath(handle);
                     if (renderer == null) {
-                        renderer = TessPDFRendererCreate(dataPath);
+                        renderer = TessPDFRendererCreate(outputbase, dataPath);
                     } else {
-                        TessResultRendererInsert(renderer, TessPDFRendererCreate(dataPath));
+                        TessResultRendererInsert(renderer, TessPDFRendererCreate(outputbase, dataPath));
                     }
                     break;
                 case BOX:
                     if (renderer == null) {
-                        renderer = TessBoxTextRendererCreate();
+                        renderer = TessBoxTextRendererCreate(outputbase);
                     } else {
-                        TessResultRendererInsert(renderer, TessBoxTextRendererCreate());
+                        TessResultRendererInsert(renderer, TessBoxTextRendererCreate(outputbase));
                     }
                     break;
                 case UNLV:
                     if (renderer == null) {
-                        renderer = TessUnlvRendererCreate();
+                        renderer = TessUnlvRendererCreate(outputbase);
                     } else {
-                        TessResultRendererInsert(renderer, TessUnlvRendererCreate());
+                        TessResultRendererInsert(renderer, TessUnlvRendererCreate(outputbase));
                     }
                     break;
             }
@@ -381,68 +382,61 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
     /**
      * Creates documents for given renderers.
      *
-     * @param imageFilename input image
-     * @param outputPrefix output filename without extension
-     * @param outputFolder output folder
-     * @param formats types of renders
+     * @param filename input file
+     * @param outputbase output filename without extension
+     * @param formats types of renderers
+     * @throws TesseractException
      */
     @Override
-    public void createDocuments(String imageFilename, String outputPrefix, String outputFolder, List<RenderedFormat> formats) {
-        Map<String, byte[]> map = getRendererOutput(imageFilename, formats);
+    public void createDocuments(String filename, String outputbase, List<RenderedFormat> formats) throws TesseractException {
+        createDocuments(new String[]{filename}, new String[]{outputbase}, formats);
+    }
 
-        for (Map.Entry<String, byte[]> entry : map.entrySet()) {
-            String key = entry.getKey();
-            byte[] value = entry.getValue();
+    /**
+     * Creates documents.
+     *
+     * @param filenames array of input files
+     * @param outputbases array of output filenames without extension
+     * @param formats types of renderers
+     * @throws TesseractException
+     */
+    @Override
+    public void createDocuments(String[] filenames, String[] outputbases, List<RenderedFormat> formats) throws TesseractException {
+        if (filenames.length != outputbases.length) {
+            throw new RuntimeException("The two arrays must match in length.");
+        }
 
-            try {
-                File file = new File(outputFolder, outputPrefix + "." + key);
-                Utils.writeFile(value, file);
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, e.getMessage(), e);
+        init();
+        setTessVariables();
+        
+        try {
+            for (int i = 0; i < filenames.length; i++) {
+                try {
+                    TessResultRenderer renderer = createRenderers(outputbases[i], formats);
+                    createDocuments(filenames[i], renderer);
+                } catch (TesseractException e) {
+                    // skip the problematic image file
+                    logger.log(Level.SEVERE, e.getMessage(), e);
+                }
             }
+        } finally {
+            dispose();
         }
     }
 
     /**
-     * Gets renderer output in form of byte arrays.
+     * Creates documents.
      *
-     * @param imageFilename input image
-     * @param formats types of renderers
-     * @return output byte arrays
+     * @param filename input file
+     * @param renderer renderer
+     * @throws TesseractException
      */
-    @Override
-    public Map<String, byte[]> getRendererOutput(String imageFilename, List<RenderedFormat> formats) {
-        init();
-        setTessVariables();
+    private void createDocuments(String filename, TessResultRenderer renderer) throws TesseractException {
+        int result = TessBaseAPIProcessPages(handle, filename, null, 0, renderer);
 
-        TessResultRenderer renderer = createRenderers(formats);
-
-        int result = TessBaseAPIProcessPages1(handle, imageFilename, null, 0, renderer);
-
-//        if (result != TessAPI.FALSE) {
-//            System.err.println("Error during processing.");
-//            return;
-//        }
-        Map<String, byte[]> map = new HashMap<String, byte[]>();
-
-        for (; renderer != null; renderer = TessResultRendererNext(renderer)) {
-            String ext = TessResultRendererExtention(renderer).getString(0);
-
-            PointerByReference data = new PointerByReference();
-            IntByReference dataLength = new IntByReference();
-
-            result = TessResultRendererGetOutput(renderer, data, dataLength);
-            if (result != TessAPI.FALSE) {
-                int length = dataLength.getValue();
-                byte[] bytes = data.getValue().getByteArray(0, length);
-                map.put(ext, bytes);
-            }
+        if (result != TessAPI.TRUE) {
+            throw new TesseractException("Error during processing.");
         }
-
-        TessDeleteResultRenderer(renderer);
-        dispose();
-
-        return map;
     }
 
     /**

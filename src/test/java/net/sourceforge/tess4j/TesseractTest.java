@@ -144,11 +144,13 @@ public class TesseractTest {
     @Test
     public void testCreateDocuments() throws Exception {
         System.out.println("createDocuments on an image");
-        String imageFilename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
-        String outFile = "docrenderer";
-        String folder = "target/test-classes/test-results";
+		String imageFilename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
+        String imageFile1 = "multipage4.tif";
+//        String imageFile2 = "eurotext.tif";
+        String outputbase1 = "target/test-classes/test-results/docrenderer";
+//        String outputbase2 = "target/test-classes/test-results/docrenderer2";
         List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT));
-        instance.createDocuments(imageFilename, outFile, folder, formats);
-        assertTrue(new File(folder, outFile + ".pdf").exists());
+        instance.createDocuments(new String[] {imageFile1}, new String[] {outputbase1}, formats);
+        assertTrue(new File(outputbase1 + ".pdf").exists());
     }
 }

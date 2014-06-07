@@ -13,7 +13,9 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 
 public class ImageHelperTest {
-    File file = new File("eurotext.png");
+    private final String testResourcesDataPath = "src/test/resources/test-data";
+    String filename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
+    File imageFile = new File(filename);
     
     public ImageHelperTest() {
     }

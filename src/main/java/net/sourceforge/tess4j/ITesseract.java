@@ -152,21 +152,22 @@ public interface ITesseract {
     void setTessVariable(String key, String value);
     
     /**
-     * Gets renderer output in form of byte arrays.
+     * Creates documents for given renderers.
      * 
-     * @param imageFilename  input image
+     * @param filename input file
+     * @param outputbase output filename without extension
      * @param formats types of renderers
-     * @return output byte arrays
+     * @throws TesseractException
      */
-    Map<String, byte[]> getRendererOutput(String imageFilename, List<RenderedFormat> formats);
+    void createDocuments(String filename, String outputbase, List<RenderedFormat> formats) throws TesseractException;
     
     /**
      * Creates documents for given renderers.
-     * 
-     * @param imageFilename input image
-     * @param outputPrefix filename without extension
-     * @param outputFolder output folder
+     *
+     * @param filenames array of input files
+     * @param outputbases array of output filenames without extension
      * @param formats types of renderers
+     * @throws TesseractException 
      */
-    void createDocuments(String imageFilename, String outputPrefix, String outputFolder, List<RenderedFormat> formats);
+    void createDocuments(String[] filenames, String[] outputbases, List<RenderedFormat> formats) throws TesseractException;
 }
