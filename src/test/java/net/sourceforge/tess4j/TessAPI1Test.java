@@ -267,7 +267,7 @@ public class TessAPI1Test {
         PointerByReference configs = null;
         int configs_size = 0;
         int expResult = 0;
-        int result = TessAPI1.TessBaseAPIInit4(handle, datapath, language, oem, configs, configs_size, null, null, new NativeSize(), TessAPI.FALSE);
+        int result = TessAPI1.TessBaseAPIInit4(handle, datapath, language, oem, configs, configs_size, null, null, new NativeSize(), TessAPI1.FALSE);
         assertEquals(expResult, result);
     }
 
@@ -556,8 +556,8 @@ public class TessAPI1Test {
         System.out.println("TessResultRenderer");
         String image = String.format("%s/%s", this.testResourcesDataPath, "eurotext.tif");
         String output = "capi-test.txt";
-        int set_only_init_params = TessAPI.FALSE;
-        int oem = TessAPI.TessOcrEngineMode.OEM_DEFAULT;
+        int set_only_init_params = TessAPI1.FALSE;
+        int oem = TessAPI1.TessOcrEngineMode.OEM_DEFAULT;
         PointerByReference configs = null;
         int configs_size = 0;
         

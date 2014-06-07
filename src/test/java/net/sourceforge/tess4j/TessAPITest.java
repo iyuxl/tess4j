@@ -370,7 +370,7 @@ public class TessAPITest {
         TessResultRenderer renderer = api.TessTextRendererCreate(outputbase);
         api.TessBaseAPIInit3(handle, datapath, language);
         int rc = api.TessBaseAPIProcessPages(handle, filename, retry_config, timeout_millisec, renderer);
-        assertEquals(TessAPI1.TRUE, rc);
+        assertEquals(TessAPI.TRUE, rc);
     }
     
     /**
@@ -417,7 +417,7 @@ public class TessAPITest {
         api.TessBaseAPIInit3(handle, datapath, language);
         api.TessBaseAPISetPageSegMode(handle, TessAPI.TessPageSegMode.PSM_AUTO_OSD);
         int actualResult = api.TessBaseAPIGetPageSegMode(handle);
-        System.out.println("PSM: " + Utils.getConstantName(actualResult, TessAPI1.TessPageSegMode.class));
+        System.out.println("PSM: " + Utils.getConstantName(actualResult, TessAPI.TessPageSegMode.class));
         api.TessBaseAPISetImage(handle, buf, image.getWidth(), image.getHeight(), bytespp, bytespl);
         int success = api.TessBaseAPIRecognize(handle, null);
         if (success == 0) {
@@ -539,12 +539,12 @@ public class TessAPITest {
                         String choice = api.TessChoiceIteratorGetUTF8Text(ci);
                         System.out.println(String.format("%s conf: %f", choice, api.TessChoiceIteratorConfidence(ci)));
                         indent = true;
-                    } while (api.TessChoiceIteratorNext(ci) == TessAPI1.TRUE);
+                    } while (api.TessChoiceIteratorNext(ci) == TessAPI.TRUE);
                     api.TessChoiceIteratorDelete(ci);
                 }
                 System.out.println("---------------------------------------------");
                 api.TessDeleteText(symbol);
-            } while (api.TessResultIteratorNext(ri, level) == TessAPI1.TRUE);
+            } while (api.TessResultIteratorNext(ri, level) == TessAPI.TRUE);
         }
         
         assertTrue(true);
