@@ -41,7 +41,7 @@ public class Tesseract1Test {
 
     static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
     Tesseract1 instance;
-    
+
     private final String datapath = "src/main/resources";
     private final String testResourcesDataPath = "src/test/resources/test-data";
 
@@ -152,12 +152,12 @@ public class Tesseract1Test {
     @Test
     public void testCreateDocuments() throws Exception {
         System.out.println("createDocuments on an image");
-        String imageFile1 = "eurotext.png";
-        String imageFile2 = "eurotext.tif";
+        String imageFile1 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
+        String imageFile2 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.tif");
         String outputbase1 = "target/test-classes/test-results/docrenderer";
         String outputbase2 = "target/test-classes/test-results/docrenderer2";
         List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT));
-        instance.createDocuments(new String[] {imageFile1, imageFile2}, new String[] {outputbase1, outputbase2}, formats);
+        instance.createDocuments(new String[]{imageFile1, imageFile2}, new String[]{outputbase1, outputbase2}, formats);
         assertTrue(new File(outputbase1 + ".pdf").exists());
     }
 
@@ -172,23 +172,23 @@ public class Tesseract1Test {
 
         String expResult = "The (quick) [brown] {fox} jumps!\nOver the $43,456.78 <lazy> #90 dog";
         String[] expResults = expResult.split("\\s");
-        
+
         Tess1Extension instance1 = new Tess1Extension();
         int pageIteratorLevel = TessAPI1.TessPageIteratorLevel.RIL_WORD;
         System.out.println("PageIteratorLevel: " + Utils.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
         instance1.setDatapath(this.datapath);
         List<Word> result = instance1.getTextElements(imageFile, pageIteratorLevel);
-        
+
         //print the complete result
         for (Word word : result) {
             System.out.println(word);
         }
-        
+
         List<String> text = new ArrayList<String>();
         for (Word word : result.subList(0, expResults.length)) {
             text.add(word.getText());
         }
-        
+
         assertArrayEquals(expResults, text.toArray());
     }
 
@@ -273,10 +273,10 @@ public class Tesseract1Test {
         public Rectangle getRect() {
             return rect;
         }
-        
+
         @Override
         public String toString() {
             return String.format("%s\t[Confidence: %f Bounding box: %d %d %d %d]", text, confidence, rect.x, rect.y, rect.width, rect.height);
-        }        
+        }
     }
 }
