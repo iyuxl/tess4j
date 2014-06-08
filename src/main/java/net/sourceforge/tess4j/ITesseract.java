@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package net.sourceforge.tess4j;
 
 import java.awt.Rectangle;
@@ -27,15 +26,14 @@ import javax.imageio.IIOImage;
  * An interface represents common OCR methods.
  */
 public interface ITesseract {
-    String htmlBeginTag = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"" + " \"http://www.w3.org/TR/html4/loose.dtd\">\n" + "<html>\n<head>\n<title></title>\n" + "<meta http-equiv=\"Content-Type\" content=\"text/html;" + "charset=utf-8\" />\n<meta name='ocr-system' content='tesseract'/>\n" + "</head>\n<body>\n";
+
+    String htmlBeginTag = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
+            + " \"http://www.w3.org/TR/html4/loose.dtd\">\n"
+            + "<html>\n<head>\n<title></title>\n"
+            + "<meta http-equiv=\"Content-Type\" content=\"text/html;"
+            + "charset=utf-8\" />\n<meta name='ocr-system' content='tesseract'/>\n"
+            + "</head>\n<body>\n";
     String htmlEndTag = "</body>\n</html>\n";
-    
-    /**
-     * Rendered formats supported by Tesseract.
-     */
-    public enum RenderedFormat {
-        TEXT, HOCR, PDF, UNLV, BOX 
-    }
 
     /**
      * Performs OCR operation.
@@ -51,8 +49,8 @@ public interface ITesseract {
      *
      * @param imageFile an image file
      * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or
-     * <code>null</code> indicates the whole image.
+     * recognized. A rectangle of zero dimension or <code>null</code> indicates
+     * the whole image.
      * @return the recognized text
      * @throws TesseractException
      */
@@ -72,8 +70,8 @@ public interface ITesseract {
      *
      * @param bi a buffered image
      * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or
-     * <code>null</code> indicates the whole image.
+     * recognized. A rectangle of zero dimension or <code>null</code> indicates
+     * the whole image.
      * @return the recognized text
      * @throws TesseractException
      */
@@ -82,28 +80,26 @@ public interface ITesseract {
     /**
      * Performs OCR operation.
      *
-     * @param imageList a list of
-     * <code>IIOImage</code> objects
+     * @param imageList a list of <code>IIOImage</code> objects
      * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or
-     * <code>null</code> indicates the whole image.
+     * recognized. A rectangle of zero dimension or <code>null</code> indicates
+     * the whole image.
      * @return the recognized text
      * @throws TesseractException
      */
     String doOCR(List<IIOImage> imageList, Rectangle rect) throws TesseractException;
 
     /**
-     * Performs OCR operation. Use
-     * <code>SetImage</code>, (optionally)
-     * <code>SetRectangle</code>, and one or more of the
-     * <code>Get*Text</code> functions.
+     * Performs OCR operation. Use <code>SetImage</code>, (optionally)
+     * <code>SetRectangle</code>, and one or more of the <code>Get*Text</code>
+     * functions.
      *
      * @param xsize width of image
      * @param ysize height of image
      * @param buf pixel data
      * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or
-     * <code>null</code> indicates the whole image.
+     * recognized. A rectangle of zero dimension or <code>null</code> indicates
+     * the whole image.
      * @param bpp bits per pixel, represents the bit depth of the image, with 1
      * for binary bitmap, 8 for gray, and 24 for color RGB.
      * @return the recognized text
@@ -142,31 +138,10 @@ public interface ITesseract {
     /**
      * Sets the value of Tesseract's internal parameter.
      *
-     * @param key variable name, e.g.,
-     * <code>tessedit_create_hocr</code>,
+     * @param key variable name, e.g., <code>tessedit_create_hocr</code>,
      * <code>tessedit_char_whitelist</code>, etc.
      * @param value value for corresponding variable, e.g., "1", "0",
      * "0123456789", etc.
      */
     void setTessVariable(String key, String value);
-    
-    /**
-     * Creates documents for given renderers.
-     * 
-     * @param filename input file
-     * @param outputbase output filename without extension
-     * @param formats types of renderers
-     * @throws TesseractException
-     */
-    void createDocuments(String filename, String outputbase, List<RenderedFormat> formats) throws TesseractException;
-    
-    /**
-     * Creates documents for given renderers.
-     *
-     * @param filenames array of input files
-     * @param outputbases array of output filenames without extension
-     * @param formats types of renderers
-     * @throws TesseractException 
-     */
-    void createDocuments(String[] filenames, String[] outputbases, List<RenderedFormat> formats) throws TesseractException;
 }

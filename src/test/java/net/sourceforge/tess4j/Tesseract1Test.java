@@ -15,9 +15,8 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.tess4j.util.Utils;
-import net.sourceforge.tess4j.util.ImageHelper;
-import net.sourceforge.tess4j.util.ImageIOHelper;
+import net.sourceforge.vietocr.ImageHelper;
+import net.sourceforge.vietocr.ImageIOHelper;
 import com.recognition.software.jdeskew.ImageDeskew;
 import com.sun.jna.Pointer;
 import javax.imageio.ImageIO;
@@ -26,10 +25,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.imageio.IIOImage;
-import net.sourceforge.tess4j.ITesseract.RenderedFormat;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -99,7 +96,7 @@ public class Tesseract1Test {
      * Test of doOCR method, of class Tesseract1.
      */
     @Test
-    public void testDoOCR_PDF() throws Exception {
+    public void testDoOCR_List_Rectangle() throws Exception {
         System.out.println("doOCR on a PDF document");
         String filename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.pdf");
         File imageFile = new File(filename);
@@ -147,21 +144,6 @@ public class Tesseract1Test {
     }
 
     /**
-     * Test of createDocuments method, of class Tesseract.
-     */
-    @Test
-    public void testCreateDocuments() throws Exception {
-        System.out.println("createDocuments for image");
-        String imageFile1 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.pdf");
-        String imageFile2 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
-        String outputbase1 = "target/test-classes/test-results/docrenderer";
-        String outputbase2 = "target/test-classes/test-results/docrenderer2";
-        List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT));
-        instance.createDocuments(new String[]{imageFile1, imageFile2}, new String[]{outputbase1, outputbase2}, formats);
-        assertTrue(new File(outputbase1 + ".pdf").exists());
-    }
-
-    /**
      * Test of extending Tesseract1.
      */
     @Test
@@ -172,32 +154,27 @@ public class Tesseract1Test {
 
         String expResult = "The (quick) [brown] {fox} jumps!\nOver the $43,456.78 <lazy> #90 dog";
         String[] expResults = expResult.split("\\s");
-
+        
         Tess1Extension instance1 = new Tess1Extension();
-        int pageIteratorLevel = TessAPI1.TessPageIteratorLevel.RIL_WORD;
-        System.out.println("PageIteratorLevel: " + Utils.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
         instance1.setDatapath(this.datapath);
-        List<Word> result = instance1.getTextElements(imageFile, pageIteratorLevel);
-
+        List<Word> result = instance1.getWords(imageFile);
+        
         //print the complete result
         for (Word word : result) {
             System.out.println(word);
         }
-
+        
         List<String> text = new ArrayList<String>();
         for (Word word : result.subList(0, expResults.length)) {
             text.add(word.getText());
         }
-
+        
         assertArrayEquals(expResults, text.toArray());
     }
 
-    /**
-     * Extends Tesseract1.
-     */
     class Tess1Extension extends Tesseract1 {
 
-        public List<Word> getTextElements(File file, int pageIteratorLevel) {
+        public List<Word> getWords(File file) {
             this.init();
             this.setTessVariables();
 
@@ -212,22 +189,22 @@ public class Tesseract1Test {
                 TessAPI1.TessPageIteratorBegin(pi);
 
                 do {
-                    Pointer ptr = TessAPI1.TessResultIteratorGetUTF8Text(ri, pageIteratorLevel);
+                    Pointer ptr = TessAPI1.TessResultIteratorGetUTF8Text(ri, TessAPI1.TessPageIteratorLevel.RIL_WORD);
                     String text = ptr.getString(0);
                     TessAPI1.TessDeleteText(ptr);
-                    float confidence = TessAPI1.TessResultIteratorConfidence(ri, pageIteratorLevel);
+                    float confidence = TessAPI1.TessResultIteratorConfidence(ri, TessAPI1.TessPageIteratorLevel.RIL_WORD);
                     IntBuffer leftB = IntBuffer.allocate(1);
                     IntBuffer topB = IntBuffer.allocate(1);
                     IntBuffer rightB = IntBuffer.allocate(1);
                     IntBuffer bottomB = IntBuffer.allocate(1);
-                    TessAPI1.TessPageIteratorBoundingBox(pi, pageIteratorLevel, leftB, topB, rightB, bottomB);
+                    TessAPI1.TessPageIteratorBoundingBox(pi, TessAPI1.TessPageIteratorLevel.RIL_WORD, leftB, topB, rightB, bottomB);
                     int left = leftB.get();
                     int top = topB.get();
                     int right = rightB.get();
                     int bottom = bottomB.get();
                     Word word = new Word(text, confidence, new Rectangle(left, top, right - left, bottom - top));
                     words.add(word);
-                } while (TessAPI1.TessPageIteratorNext(pi, pageIteratorLevel) == TessAPI1.TRUE);
+                } while (TessAPI1.TessPageIteratorNext(pi, TessAPI1.TessPageIteratorLevel.RIL_WORD) == TessAPI1.TRUE);
 
                 return words;
             } catch (Exception e) {

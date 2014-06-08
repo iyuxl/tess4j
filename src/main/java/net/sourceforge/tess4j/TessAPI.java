@@ -18,11 +18,9 @@ package net.sourceforge.tess4j;
 import com.sun.jna.*;
 import com.sun.jna.ptr.*;
 import java.nio.*;
-import com.ochafik.lang.jnaerator.runtime.NativeSize;
 
 /**
- * A Java wrapper for
- * <code>Tesseract OCR 3.03 API</code> using
+ * A Java wrapper for <code>Tesseract OCR 3.02 API</code> using
  * <code>JNA Interface Mapping</code>.
  */
 public interface TessAPI extends Library {
@@ -31,7 +29,7 @@ public interface TessAPI extends Library {
     /**
      * Native library name.
      */
-    public static final String LIB_NAME = "libtesseract303";
+    public static final String LIB_NAME = "libtesseract302";
     public static final String LIB_NAME_NON_WIN = "tesseract";
     /**
      * An instance of the class library.
@@ -50,20 +48,26 @@ public interface TessAPI extends Library {
      */
     public static interface TessOcrEngineMode {
 
-        /** Run Tesseract only - fastest */
-        public static final int OEM_TESSERACT_ONLY = 0;
-        /** Run Cube only - better accuracy, but slower */
-        public static final int OEM_CUBE_ONLY = 1;
-        /** Run both and combine results - best accuracy */
-        public static final int OEM_TESSERACT_CUBE_COMBINED = 2;
-        /** Specify this mode when calling init_*(),
-         to indicate that any of the above modes
-         should be automatically inferred from the
-         variables in the language-specific config,
-         command-line configs, or if not specified
-         in any of the above should be set to the
-         default OEM_TESSERACT_ONLY. */
-        public static final int OEM_DEFAULT = 3;
+        /**
+         * Run Tesseract only - fastest
+         */
+        public static final int OEM_TESSERACT_ONLY = (int) 0;
+        /**
+         * Run Cube only - better accuracy, but slower
+         */
+        public static final int OEM_CUBE_ONLY = (int) 1;
+        /**
+         * Run both and combine results - best accuracy
+         */
+        public static final int OEM_TESSERACT_CUBE_COMBINED = (int) 2;
+        /**
+         * Specify this mode when calling init_*(), to indicate that any of the
+         * above modes should be automatically inferred from the variables in
+         * the language-specific config, command-line configs, or if not
+         * specified in any of the above should be set to the default
+         * OEM_TESSERACT_ONLY.
+         */
+        public static final int OEM_DEFAULT = (int) 3;
     };
 
     /**
@@ -72,35 +76,64 @@ public interface TessAPI extends Library {
      * <code>OSD_ONLY</code>, so that the inequality test macros below work.
      */
     public static interface TessPageSegMode {
-       
-        /** Orientation and script detection only. */
-        public static final int PSM_OSD_ONLY = 0;
-        /** Automatic page segmentation with orientation and script detection. (OSD) */
-        public static final int PSM_AUTO_OSD = 1;
-        /** Automatic page segmentation, but no OSD, or OCR. */
-        public static final int PSM_AUTO_ONLY = 2;
-        /** Fully automatic page segmentation, but no OSD. */
-        public static final int PSM_AUTO = 3;
-        /** Assume a single column of text of variable sizes. */
-        public static final int PSM_SINGLE_COLUMN = 4;
-        /** Assume a single uniform block of vertically aligned text. */
-        public static final int PSM_SINGLE_BLOCK_VERT_TEXT = 5;
-        /** Assume a single uniform block of text. */
-        public static final int PSM_SINGLE_BLOCK = 6;
-        /** Treat the image as a single text line. */
-        public static final int PSM_SINGLE_LINE = 7;
-        /** Treat the image as a single word. */
-        public static final int PSM_SINGLE_WORD = 8;
-        /** Treat the image as a single word in a circle. */
-        public static final int PSM_CIRCLE_WORD = 9;
-        /** Treat the image as a single character.  */
-        public static final int PSM_SINGLE_CHAR = 10;
-        /** Find as much text as possible in no particular order.  */
-        public static final int PSM_SPARSE_TEXT = 11;
-        /** Sparse text with orientation and script detection.  */
-        public static final int PSM_SPARSE_TEXT_OSD = 12;
-        /** Number of enum entries. */
-        public static final int PSM_COUNT = 13;
+
+        /**
+         * Orientation and script detection only.
+         */
+        public static final int PSM_OSD_ONLY = (int) 0;
+        /**
+         * Automatic page segmentation with orientation and script detection.
+         * (OSD)
+         */
+        public static final int PSM_AUTO_OSD = (int) 1;
+        /**
+         * Automatic page segmentation, but no OSD, or OCR.
+         */
+        public static final int PSM_AUTO_ONLY = (int) 2;
+        /**
+         * Fully automatic page segmentation, but no OSD.
+         */
+        public static final int PSM_AUTO = (int) 3;
+        /**
+         * Assume a single column of text of variable sizes.
+         */
+        public static final int PSM_SINGLE_COLUMN = (int) 4;
+        /**
+         * Assume a single uniform block of vertically aligned text.
+         */
+        public static final int PSM_SINGLE_BLOCK_VERT_TEXT = (int) 5;
+        /**
+         * Assume a single uniform block of text.
+         */
+        public static final int PSM_SINGLE_BLOCK = (int) 6;
+        /**
+         * Treat the image as a single text line.
+         */
+        public static final int PSM_SINGLE_LINE = (int) 7;
+        /**
+         * Treat the image as a single word.
+         */
+        public static final int PSM_SINGLE_WORD = (int) 8;
+        /**
+         * Treat the image as a single word in a circle.
+         */
+        public static final int PSM_CIRCLE_WORD = (int) 9;
+        /**
+         * Treat the image as a single character.
+         */
+        public static final int PSM_SINGLE_CHAR = (int) 10;
+        /**
+         * Find as much text as possible in no particular order.
+         */
+        public static final int PSM_SPARSE_TEXT = (int) 11;
+        /**
+         * Sparse text with orientation and script detection.
+         */
+        public static final int PSM_SPARSE_TEXT_OSD = (int) 12;
+        /**
+         * Number of enum entries.
+         */
+        public static final int PSM_COUNT = (int) 13;
     };
 
     /**
@@ -110,52 +143,94 @@ public interface TessAPI extends Library {
      */
     public static interface TessPageIteratorLevel {
 
-        /** Block of text/image/separator line. */
-        public static final int RIL_BLOCK = 0;
-        /** Paragraph within a block. */
-        public static final int RIL_PARA = 1;
-        /** Line within a paragraph. */
-        public static final int RIL_TEXTLINE = 2;
-        /** Word within a textline. */
-        public static final int RIL_WORD = 3;
-        /** Symbol/character within a word. */
-        public static final int RIL_SYMBOL = 4;
+        /**
+         * Block of text/image/separator line.
+         */
+        public static final int RIL_BLOCK = (int) 0;
+        /**
+         * Paragraph within a block.
+         */
+        public static final int RIL_PARA = (int) 1;
+        /**
+         * Line within a paragraph.
+         */
+        public static final int RIL_TEXTLINE = (int) 2;
+        /**
+         * Word within a textline.
+         */
+        public static final int RIL_WORD = (int) 3;
+        /**
+         * Symbol/character within a word.
+         */
+        public static final int RIL_SYMBOL = (int) 4;
     };
 
     public static interface TessPolyBlockType {
 
-        /** Type is not yet known. Keep as the first element. */
-        public static final int PT_UNKNOWN = 0;
-        /** Text that lives inside a column. */
-        public static final int PT_FLOWING_TEXT = 1;
-        /** Text that spans more than one column. */
-        public static final int PT_HEADING_TEXT = 2;
-        /** Text that is in a cross-column pull-out region. */
-        public static final int PT_PULLOUT_TEXT = 3;
-        /** Partition belonging to an equation region. */
-        public static final int PT_EQUATION = 4;
-        /** Partition has inline equation. */
-        public static final int PT_INLINE_EQUATION = 5;
-        /** Partition belonging to a table region. */
-        public static final int PT_TABLE = 6;
-        /** Text-line runs vertically. */
-        public static final int PT_VERTICAL_TEXT = 7;
-        /** Text that belongs to an image. */
-        public static final int PT_CAPTION_TEXT = 8;
-        /** Image that lives inside a column. */
-        public static final int PT_FLOWING_IMAGE = 9;
-        /** Image that spans more than one column. */
-        public static final int PT_HEADING_IMAGE = 10;
-        /** Image that is in a cross-column pull-out region. */
-        public static final int PT_PULLOUT_IMAGE = 11;
-        /** Horizontal Line. */
-        public static final int PT_HORZ_LINE = 12;
-        /** Vertical Line. */
-        public static final int PT_VERT_LINE = 13;
-        /** Lies outside of any column. */
-        public static final int PT_NOISE = 14;
-        /** Number of enum entries. */
-        public static final int PT_COUNT = 15;
+        /**
+         * Type is not yet known. Keep as the first element.
+         */
+        public static final int PT_UNKNOWN = (int) 0;
+        /**
+         * Text that lives inside a column.
+         */
+        public static final int PT_FLOWING_TEXT = (int) 1;
+        /**
+         * Text that spans more than one column.
+         */
+        public static final int PT_HEADING_TEXT = (int) 2;
+        /**
+         * Text that is in a cross-column pull-out region.
+         */
+        public static final int PT_PULLOUT_TEXT = (int) 3;
+        /**
+         * Partition belonging to an equation region.
+         */
+        public static final int PT_EQUATION = (int) 4;
+        /**
+         * Partition has inline equation.
+         */
+        public static final int PT_INLINE_EQUATION = (int) 5;
+        /**
+         * Partition belonging to a table region.
+         */
+        public static final int PT_TABLE = (int) 6;
+        /**
+         * Text-line runs vertically.
+         */
+        public static final int PT_VERTICAL_TEXT = (int) 7;
+        /**
+         * Text that belongs to an image.
+         */
+        public static final int PT_CAPTION_TEXT = (int) 8;
+        /**
+         * Image that lives inside a column.
+         */
+        public static final int PT_FLOWING_IMAGE = (int) 9;
+        /**
+         * Image that spans more than one column.
+         */
+        public static final int PT_HEADING_IMAGE = (int) 10;
+        /**
+         * Image that is in a cross-column pull-out region.
+         */
+        public static final int PT_PULLOUT_IMAGE = (int) 11;
+        /**
+         * Horizontal Line.
+         */
+        public static final int PT_HORZ_LINE = (int) 12;
+        /**
+         * Vertical Line.
+         */
+        public static final int PT_VERT_LINE = (int) 13;
+        /**
+         * Lies outside of any column.
+         */
+        public static final int PT_NOISE = (int) 14;
+        /**
+         * Number of enum entries.
+         */
+        public static final int PT_COUNT = (int) 15;
     };
 
     /**
@@ -172,35 +247,35 @@ public interface TessAPI extends Library {
      *  | < #######  .   c |
      *  | 3 #######      c |
      *  +------------------+
-     * </pre>
-     * Orientation Example:<br />
-     * ====================<br />
-     * Above is a
-     * diagram of some (1) English and (2) Chinese text and a (3) photo
-     * credit.<br />
+     * </pre> Orientation Example:
      * <br />
-     * Upright Latin characters are represented as A and a. '<' represents
-     * a latin character rotated anti-clockwise 90 degrees. Upright
-     * Chinese characters are represented C and c.<br />
+     * ====================
      * <br />
-     * NOTA BENE: enum values here should match goodoc.proto<br />
+     * Above is a diagram of some (1) English and (2) Chinese text and a (3)
+     * photo credit.<br />
      * <br />
-     * If you orient your head so that "up" aligns with Orientation, then
-     * the characters will appear "right side up" and readable.<br />
+     * Upright Latin characters are represented as A and a. '<' represents a
+     * latin character rotated anti-clockwise 90 degrees. Upright Chinese
+     * characters are represented C and c.<br /> <br /> NOTA BENE: enum values
+     * here should match goodoc.proto<br /> <br /> If you orient your head so th
+     * a
+     * t
+     * "
+     * up" aligns with Orientation, then the characters will appear "right side
+     * up" and readable.<br />
      * <br />
-     * In the example above, both the
-     * English and Chinese paragraphs are oriented so their "up" is the top of
-     * the page (page up). The photo credit is read with one's head turned
-     * leftward ("up" is to page left).<br />
-     * <br /> The values of this enum
-     * match the convention of Tesseract's osdetect.h
+     * In the example above, both the English and Chinese paragraphs are
+     * oriented so their "up" is the top of the page (page up). The photo credit
+     * is read with one's head turned leftward ("up" is to page left).<br />
+     * <br /> The values of this enum match the convention of Tesseract's
+     * osdetect.h
      */
     public static interface TessOrientation {
 
-        public static final int ORIENTATION_PAGE_UP = 0;
-        public static final int ORIENTATION_PAGE_RIGHT = 1;
-        public static final int ORIENTATION_PAGE_DOWN = 2;
-        public static final int ORIENTATION_PAGE_LEFT = 3;
+        public static final int ORIENTATION_PAGE_UP = (int) 0;
+        public static final int ORIENTATION_PAGE_RIGHT = (int) 1;
+        public static final int ORIENTATION_PAGE_DOWN = (int) 2;
+        public static final int ORIENTATION_PAGE_LEFT = (int) 3;
     };
 
     /**
@@ -212,9 +287,9 @@ public interface TessAPI extends Library {
      */
     public static interface TessWritingDirection {
 
-        public static final int WRITING_DIRECTION_LEFT_TO_RIGHT = 0;
-        public static final int WRITING_DIRECTION_RIGHT_TO_LEFT = 1;
-        public static final int WRITING_DIRECTION_TOP_TO_BOTTOM = 2;
+        public static final int WRITING_DIRECTION_LEFT_TO_RIGHT = (int) 0;
+        public static final int WRITING_DIRECTION_RIGHT_TO_LEFT = (int) 1;
+        public static final int WRITING_DIRECTION_TOP_TO_BOTTOM = (int) 2;
     };
 
     /**
@@ -228,52 +303,23 @@ public interface TessAPI extends Library {
      */
     public static interface TessTextlineOrder {
 
-        public static final int TEXTLINE_ORDER_LEFT_TO_RIGHT = 0;
-        public static final int TEXTLINE_ORDER_RIGHT_TO_LEFT = 1;
-        public static final int TEXTLINE_ORDER_TOP_TO_BOTTOM = 2;
+        public static final int TEXTLINE_ORDER_LEFT_TO_RIGHT = (int) 0;
+        public static final int TEXTLINE_ORDER_RIGHT_TO_LEFT = (int) 1;
+        public static final int TEXTLINE_ORDER_TOP_TO_BOTTOM = (int) 2;
     };
-    public static final int TRUE = 1;
-    public static final int FALSE = 0;
+    public static final int TRUE = (int) 1;
+    public static final int FALSE = (int) 0;
 
     /**
      * Returns the version identifier.
      */
     String TessVersion();
-    
+
     void TessDeleteText(Pointer text);
 
     void TessDeleteTextArray(PointerByReference arr);
 
     void TessDeleteIntArray(IntBuffer arr);
-    
-    /* Renderer API */
-    TessAPI.TessResultRenderer TessTextRendererCreate(String outputbase);
-
-    TessAPI.TessResultRenderer TessHOcrRendererCreate(String outputbase);
-
-    TessAPI.TessResultRenderer TessPDFRendererCreate(String outputbase, String datadir);
-
-    TessAPI.TessResultRenderer TessUnlvRendererCreate(String outputbase);
-
-    TessAPI.TessResultRenderer TessBoxTextRendererCreate(String outputbase);
-
-    void TessDeleteResultRenderer(TessAPI.TessResultRenderer renderer);
-
-    void TessResultRendererInsert(TessAPI.TessResultRenderer renderer, TessAPI.TessResultRenderer next);
-
-    TessAPI.TessResultRenderer TessResultRendererNext(TessAPI.TessResultRenderer renderer);
-
-    int TessResultRendererBeginDocument(TessAPI.TessResultRenderer renderer, String title);
-
-    int TessResultRendererAddImage(TessAPI.TessResultRenderer renderer, PointerByReference api);
-
-    int TessResultRendererEndDocument(TessAPI.TessResultRenderer renderer);
-
-    Pointer TessResultRendererExtention(TessAPI.TessResultRenderer renderer);
-
-    Pointer TessResultRendererTitle(TessAPI.TessResultRenderer renderer);
-
-    int TessResultRendererImageNum(TessAPI.TessResultRenderer renderer);
 
     /**
      * Creates an instance of the base class for all Tesseract APIs.
@@ -292,19 +338,6 @@ public interface TessAPI extends Library {
     void TessBaseAPISetInputName(TessAPI.TessBaseAPI handle, String name);
 
     /**
-     * These functions are required for searchable PDF output.
-     * We need our hands on the input file so that we can include
-     * it in the PDF without transcoding. If that is not possible,
-     * we need the original image. Finally, resolution metadata
-     * is stored in the PDF so we need that as well.
-     */
-    String TessBaseAPIGetInputName(TessAPI.TessBaseAPI handle);
-
-    int TessBaseAPIGetSourceYResolution(TessAPI.TessBaseAPI handle);
-	
-    String TessBaseAPIGetDatapath(TessAPI.TessBaseAPI handle);
-        
-    /**
      * Set the name of the bonus output files. Needed only for debugging.
      */
     void TessBaseAPISetOutputName(TessAPI.TessBaseAPI handle, String name);
@@ -314,15 +347,12 @@ public interface TessAPI extends Library {
      * parameter and the value as a string, just as you would in a config file.
      * Returns false if the name lookup failed. E.g.,
      * <code>SetVariable("tessedit_char_blacklist", "xyz");</code> to ignore x,
-     * y and z. Or
-     * <code>SetVariable("classify_bln_numeric_mode", "1");</code> to set
-     * numeric-only mode.
-     * <code>SetVariable</code> may be used before
+     * y and z. Or <code>SetVariable("classify_bln_numeric_mode", "1");</code>
+     * to set numeric-only mode. <code>SetVariable</code> may be used before
      * <code>Init</code>, but settings will revert to defaults on
      * <code>End()</code>.<br /> <br /> Note: Must be called after
      * <code>Init()</code>. Only works for non-init variables (init variables
-     * should be passed to
-     * <code>Init()</code>).
+     * should be passed to <code>Init()</code>).
      */
     int TessBaseAPISetVariable(TessAPI.TessBaseAPI handle, String name, String value);
 
@@ -355,8 +385,7 @@ public interface TessAPI extends Library {
      * those listed above here in the class definition.<br /> <br /> The
      * <code>datapath</code> must be the name of the parent directory of
      * tessdata and must end in / . Any name after the last / will be stripped.
-     * The language is (usually) an
-     * <code>ISO 639-3</code> string or
+     * The language is (usually) an <code>ISO 639-3</code> string or
      * <code>NULL</code> will default to eng. It is entirely safe (and
      * eventually will be efficient too) to call Init multiple times on the same
      * instance to change language, or just to reset the classifier. The
@@ -372,23 +401,18 @@ public interface TessAPI extends Library {
      * words. WARNING: On changing languages, all Tesseract parameters are reset
      * back to their default values. (Which may vary between languages.) If you
      * have a rare need to set a Variable that controls initialization for a
-     * second call to
-     * <code>Init</code> you should explicitly call
-     * <code>End()</code> and then use
-     * <code>SetVariable</code> before
+     * second call to <code>Init</code> you should explicitly call
+     * <code>End()</code> and then use <code>SetVariable</code> before
      * <code>Init</code>. This is only a very rare use case, since there are
      * very few uses that require any parameters to be set before
-     * <code>Init</code>.<br /> <br /> If
-     * <code>set_only_non_debug_params</code> is true, only params that do not
-     * contain "debug" in the name will be set.
+     * <code>Init</code>.<br /> <br /> If <code>set_only_non_debug_params</code>
+     * is true, only params that do not contain "debug" in the name will be set.
      */
     int TessBaseAPIInit1(TessAPI.TessBaseAPI handle, String datapath, String language, int oem, PointerByReference configs, int configs_size);
 
     int TessBaseAPIInit2(TessAPI.TessBaseAPI handle, String datapath, String language, int oem);
 
     int TessBaseAPIInit3(TessAPI.TessBaseAPI handle, String datapath, String language);
-
-    int TessBaseAPIInit4(TessAPI.TessBaseAPI handle, String datapath, String language, int oem, PointerByReference configs, int configs_size, PointerByReference vars_vec, PointerByReference vars_values, NativeSize vars_vec_size, int set_only_non_debug_params);
 
     /**
      * Returns the languages string used in the last valid initialization. If
@@ -402,9 +426,8 @@ public interface TessAPI extends Library {
 
     /**
      * Returns the loaded languages in the vector of STRINGs. Includes all
-     * languages loaded by the last
-     * <code>Init</code>, including those loaded as dependencies of other loaded
-     * languages.
+     * languages loaded by the last <code>Init</code>, including those loaded as
+     * dependencies of other loaded languages.
      */
     PointerByReference TessBaseAPIGetLoadedLanguagesAsVector(TessAPI.TessBaseAPI handle);
 
@@ -415,8 +438,7 @@ public interface TessAPI extends Library {
 
     /**
      * Init only the lang model component of Tesseract. The only functions that
-     * work after this init are
-     * <code>SetVariable</code> and
+     * work after this init are <code>SetVariable</code> and
      * <code>IsValidWord</code>. WARNING: temporary! This function will be
      * removed from here and placed in a separate API at some future time.
      */
@@ -424,16 +446,14 @@ public interface TessAPI extends Library {
 
     /**
      * Init only for page layout analysis. Use only for calls to
-     * <code>SetImage</code> and
-     * <code>AnalysePage</code>. Calls that attempt recognition will generate an
-     * error.
+     * <code>SetImage</code> and <code>AnalysePage</code>. Calls that attempt
+     * recognition will generate an error.
      */
     void TessBaseAPIInitForAnalysePage(TessAPI.TessBaseAPI handle);
 
     /**
      * Read a "config" file containing a set of param, value pairs. Searches the
-     * standard places:
-     * <code>tessdata/configs</code>,
+     * standard places: <code>tessdata/configs</code>,
      * <code>tessdata/tessconfigs</code> and also accepts a relative or absolute
      * path name. Note: only non-init params will be set (init params are set by
      * <code>Init()</code>).
@@ -455,20 +475,17 @@ public interface TessAPI extends Library {
 
     /**
      * Recognize a rectangle from an image and return the result as a string.
-     * May be called many times for a single
-     * <code>Init</code>. Currently has no error checking. Greyscale of 8 and
-     * color of 24 or 32 bits per pixel may be given. Palette color images will
-     * not work properly and must be converted to 24 bit. Binary images of 1 bit
-     * per pixel may also be given but they must be byte packed with the MSB of
-     * the first byte being the first pixel, and a 1 represents WHITE. For
-     * binary images set bytes_per_pixel=0. The recognized text is returned as a
-     * char* which is coded as UTF8 and must be freed with the delete []
-     * operator.<br /> <br /> Note that
-     * <code>TesseractRect</code> is the simplified convenience interface. For
-     * advanced uses, use
-     * <code>SetImage</code>, (optionally)
-     * <code>SetRectangle</code>,
-     * <code>Recognize</code>, and one or more of the
+     * May be called many times for a single <code>Init</code>. Currently has no
+     * error checking. Greyscale of 8 and color of 24 or 32 bits per pixel may
+     * be given. Palette color images will not work properly and must be
+     * converted to 24 bit. Binary images of 1 bit per pixel may also be given
+     * but they must be byte packed with the MSB of the first byte being the
+     * first pixel, and a 1 represents WHITE. For binary images set
+     * bytes_per_pixel=0. The recognized text is returned as a char* which is
+     * coded as UTF8 and must be freed with the delete [] operator.<br /> <br />
+     * Note that <code>TesseractRect</code> is the simplified convenience
+     * interface. For advanced uses, use <code>SetImage</code>, (optionally)
+     * <code>SetRectangle</code>, <code>Recognize</code>, and one or more of the
      * <code>Get*Text</code> functions below.
      */
     Pointer TessBaseAPIRect(TessAPI.TessBaseAPI handle, ByteBuffer imagedata, int bytes_per_pixel, int bytes_per_line, int left, int top, int width, int height);
@@ -483,8 +500,7 @@ public interface TessAPI extends Library {
      * Provide an image for Tesseract to recognize. Format is as TesseractRect
      * above. Does not copy the image buffer, or take ownership. The source
      * image may be destroyed after Recognize is called, either explicitly or
-     * implicitly via one of the
-     * <code>Get*Text</code> functions.
+     * implicitly via one of the <code>Get*Text</code> functions.
      * <code>SetImage</code> clears all recognition results, and sets the
      * rectangle to the full image, so it may be followed immediately by a
      * <code>GetUTF8Text</code>, and it will automatically perform recognition.
@@ -499,18 +515,22 @@ public interface TessAPI extends Library {
 
     /**
      * Restrict recognition to a sub-rectangle of the image. Call after
-     * <code>SetImage</code>. Each
-     * <code>SetRectangle</code> clears the recognition results so multiple
-     * rectangles can be recognized with the same image.
+     * <code>SetImage</code>. Each <code>SetRectangle</code> clears the
+     * recognition results so multiple rectangles can be recognized with the
+     * same image.
      */
     void TessBaseAPISetRectangle(TessAPI.TessBaseAPI handle, int left, int top, int width, int height);
 
-    /** Scale factor from original image. */
+    /**
+     * Scale factor from original image.
+     */
     int TessBaseAPIGetThresholdedImageScaleFactor(TessAPI.TessBaseAPI handle);
 
-    /** Dump the internal binary image to a PGM file. */
+    /**
+     * Dump the internal binary image to a PGM file.
+     */
     void TessBaseAPIDumpPGM(TessAPI.TessBaseAPI handle, String filename);
-                
+
     /**
      * Runs page layout analysis in the mode set by SetPageSegMode. May
      * optionally be called prior to Recognize to get access to just the page
@@ -518,22 +538,17 @@ public interface TessAPI extends Library {
      * error. The returned iterator must be deleted after use. WARNING! This
      * class points to data held within the TessBaseAPI class, and therefore can
      * only be used while the TessBaseAPI class still exists and has not been
-     * subjected to a call of
-     * <code>Init</code>,
-     * <code>SetImage</code>,
-     * <code>Recognize</code>,
-     * <code>Clear</code>,
-     * <code>End</code>, DetectOS, or anything else that changes the internal
-     * PAGE_RES.
+     * subjected to a call of <code>Init</code>, <code>SetImage</code>,
+     * <code>Recognize</code>, <code>Clear</code>, <code>End</code>, DetectOS,
+     * or anything else that changes the internal PAGE_RES.
      */
     TessAPI.TessPageIterator TessBaseAPIAnalyseLayout(TessAPI.TessBaseAPI handle);
 
     /**
      * Recognize the image from SetAndThresholdImage, generating Tesseract
      * internal structures. Returns 0 on success. Optional. The
-     * <code>Get*Text</code> functions below will call
-     * <code>Recognize</code> if needed. After Recognize, the output is kept
-     * internally until the next
+     * <code>Get*Text</code> functions below will call <code>Recognize</code> if
+     * needed. After Recognize, the output is kept internally until the next
      * <code>SetImage</code>.
      */
     int TessBaseAPIRecognize(TessAPI.TessBaseAPI handle, TessAPI.ETEXT_DESC monitor);
@@ -548,44 +563,39 @@ public interface TessAPI extends Library {
      * Recognize. The returned iterator must be deleted after use. WARNING! This
      * class points to data held within the TessBaseAPI class, and therefore can
      * only be used while the TessBaseAPI class still exists and has not been
-     * subjected to a call of
-     * <code>Init</code>,
-     * <code>SetImage</code>,
-     * <code>Recognize</code>,
-     * <code>Clear</code>,
-     * <code>End</code>, DetectOS, or anything else that changes the internal
-     * PAGE_RES.
+     * subjected to a call of <code>Init</code>, <code>SetImage</code>,
+     * <code>Recognize</code>, <code>Clear</code>, <code>End</code>, DetectOS,
+     * or anything else that changes the internal PAGE_RES.
      */
     TessAPI.TessResultIterator TessBaseAPIGetIterator(TessAPI.TessBaseAPI handle);
-    
-   /**
-    * Get a mutable iterator to the results of LayoutAnalysis and/or Recognize.
-    * The returned iterator must be deleted after use.
-    * WARNING! This class points to data held within the TessBaseAPI class, and
-    * therefore can only be used while the TessBaseAPI class still exists and
-    * has not been subjected to a call of Init, SetImage, Recognize, Clear, End
-    * DetectOS, or anything else that changes the internal PAGE_RES.
-    */
+
+    /**
+     * Get a mutable iterator to the results of LayoutAnalysis and/or Recognize.
+     * The returned iterator must be deleted after use. WARNING! This class
+     * points to data held within the TessBaseAPI class, and therefore can only
+     * be used while the TessBaseAPI class still exists and has not been
+     * subjected to a call of Init, SetImage, Recognize, Clear, End DetectOS, or
+     * anything else that changes the internal PAGE_RES.
+     */
     TessAPI.TessMutableIterator TessBaseAPIGetMutableIterator(TessAPI.TessBaseAPI handle);
 
     /**
      * Recognizes all the pages in the named file, as a multi-page tiff or list
      * of filenames, or single image, and gets the appropriate kind of text
-     * according to parameters:
-     * <code>tessedit_create_boxfile</code>,
+     * according to parameters: <code>tessedit_create_boxfile</code>,
      * <code>tessedit_make_boxes_from_boxes</code>,
-     * <code>tessedit_write_unlv</code>,
-     * <code>tessedit_create_hocr</code>. Calls ProcessPage on each page in the
-     * input file, which may be a multi-page tiff, single-page other file
-     * format, or a plain text list of images to read. If tessedit_page_number
-     * is non-negative, processing begins at that page of a multi-page tiff
-     * file, or filelist. The text is returned in text_out. Returns false on
-     * error. If non-zero timeout_millisec terminates processing after the
-     * timeout on a single page. If non-NULL and non-empty, and some page fails
-     * for some reason, the page is reprocessed with the retry_config config
-     * file. Useful for interactively debugging a bad page.
+     * <code>tessedit_write_unlv</code>, <code>tessedit_create_hocr</code>.
+     * Calls ProcessPage on each page in the input file, which may be a
+     * multi-page tiff, single-page other file format, or a plain text list of
+     * images to read. If tessedit_page_number is non-negative, processing
+     * begins at that page of a multi-page tiff file, or filelist. The text is
+     * returned in text_out. Returns false on error. If non-zero
+     * timeout_millisec terminates processing after the timeout on a single
+     * page. If non-NULL and non-empty, and some page fails for some reason, the
+     * page is reprocessed with the retry_config config file. Useful for
+     * interactively debugging a bad page.
      */
-    int TessBaseAPIProcessPages(TessAPI.TessBaseAPI handle, String filename, String retry_config, int timeout_millisec, TessAPI.TessResultRenderer renderer);
+    Pointer TessBaseAPIProcessPages(TessAPI.TessBaseAPI handle, String filename, String retry_config, int timeout_millisec);
 
     /**
      * The recognized text is returned as a char* which is coded as UTF-8 and
@@ -643,21 +653,18 @@ public interface TessAPI extends Library {
     /**
      * Free up recognition results and any stored image data, without actually
      * freeing any recognition data that would be time-consuming to reload.
-     * Afterwards, you must call
-     * <code>SetImage</code> or
-     * <code>TesseractRect</code> before doing any
-     * <code>Recognize</code> or
+     * Afterwards, you must call <code>SetImage</code> or
+     * <code>TesseractRect</code> before doing any <code>Recognize</code> or
      * <code>Get*</code> operation.
      */
     void TessBaseAPIClear(TessAPI.TessBaseAPI handle);
 
     /**
-     * Close down tesseract and free up all memory.
-     * <code>End()</code> is equivalent to destructing and reconstructing your
-     * TessBaseAPI. Once
+     * Close down tesseract and free up all memory. <code>End()</code> is
+     * equivalent to destructing and reconstructing your TessBaseAPI. Once
      * <code>End()</code> has been used, none of the other API functions may be
-     * used other than
-     * <code>Init</code> and anything declared above it in the class definition.
+     * used other than <code>Init</code> and anything declared above it in the
+     * class definition.
      */
     void TessBaseAPIEnd(TessAPI.TessBaseAPI handle);
 
@@ -672,15 +679,6 @@ public interface TessAPI extends Library {
 
     int TessBaseAPIGetTextDirection(TessAPI.TessBaseAPI handle, IntBuffer out_offset, FloatBuffer out_slope);
 
-    /**
-     * Clear any library-level memory caches.
-     * There are a variety of expensive-to-load constant data structures (mostly
-     * language dictionaries) that are cached globally -- surviving the <code>Init()</code>
-     * and <code>End()</code> of individual TessBaseAPI's.  This function allows the clearing
-     * of these caches.
-     */
-    void TessBaseAPIClearPersistentCache(TessAPI.TessBaseAPI handle);
-    
     /**
      * This method returns the string form of the specified unichar.
      */
@@ -716,14 +714,10 @@ public interface TessAPI extends Library {
 
     TessAPI.TessPageIterator TessResultIteratorGetPageIteratorConst(TessAPI.TessResultIterator handle);
 
-    int TessResultIteratorNext(TessAPI.TessResultIterator handle, int level);
-    
     Pointer TessResultIteratorGetUTF8Text(TessAPI.TessResultIterator handle, int level);
 
     float TessResultIteratorConfidence(TessAPI.TessResultIterator handle, int level);
 
-    String TessResultIteratorWordRecognitionLanguage(TessAPI.TessResultIterator handle);
-    
     String TessResultIteratorWordFontAttributes(TessAPI.TessResultIterator handle, IntBuffer is_bold, IntBuffer is_italic, IntBuffer is_underlined, IntBuffer is_monospace, IntBuffer is_serif, IntBuffer is_smallcaps, IntBuffer pointsize, IntBuffer font_id);
 
     int TessResultIteratorWordIsFromDictionary(TessAPI.TessResultIterator handle);
@@ -735,25 +729,7 @@ public interface TessAPI extends Library {
     int TessResultIteratorSymbolIsSubscript(TessAPI.TessResultIterator handle);
 
     int TessResultIteratorSymbolIsDropcap(TessAPI.TessResultIterator handle);
-    
-    /* Choice iterator */
-    TessAPI.TessChoiceIterator TessResultIteratorGetChoiceIterator(TessAPI.TessResultIterator handle);
 
-    void TessChoiceIteratorDelete(TessAPI.TessChoiceIterator handle);
-    
-    int TessChoiceIteratorNext(TessAPI.TessChoiceIterator handle);
-
-    String TessChoiceIteratorGetUTF8Text(TessAPI.TessChoiceIterator handle);
-	
-    float TessChoiceIteratorConfidence(TessAPI.TessChoiceIterator handle);
-	
-    /**
-     * Base class for all tesseract APIs. Specific classes can add ability to
-     * work on different inputs or produce different outputs. This class is
-     * mostly an interface layer on top of the Tesseract instance class to hide
-     * the data types so that users of this class don't have to include any
-     * other Tesseract headers.
-     */
     public static class TessBaseAPI extends PointerType {
 
         public TessBaseAPI(Pointer address) {
@@ -765,18 +741,6 @@ public interface TessAPI extends Library {
         }
     };
 
-    /**
-     * Description of the output of the OCR engine. This structure is used as
-     * both a progress monitor and the final output header, since it needs to be
-     * a valid progress monitor while the OCR engine is storing its output to
-     * shared memory. During progress, all the buffer info is -1. Progress
-     * starts at 0 and increases to 100 during OCR. No other constraint. Every
-     * progress callback, the OCR engine must set <code>ocr_alive</code> to 1.
-     * The HP side will set <code>ocr_alive</code> to 0. Repeated failure to
-     * reset to 1 indicates that the OCR engine is dead. If the cancel function
-     * is not null then it is called with the number of user words found. If it
-     * returns true then operation is cancelled.
-     */
     public static class ETEXT_DESC extends PointerType {
 
         public ETEXT_DESC(Pointer address) {
@@ -788,21 +752,6 @@ public interface TessAPI extends Library {
         }
     };
 
-    /**
-     * Class to iterate over tesseract page structure, providing access to all
-     * levels of the page hierarchy, without including any tesseract headers or
-     * having to handle any tesseract structures.<br>
-     * WARNING! This class points to data held within the TessBaseAPI class, and
-     * therefore can only be used while the TessBaseAPI class still exists and
-     * has not been subjected to a call of <code>Init</code>,
-     * <code>SetImage</code>, <code>Recognize</code>, <code>Clear</code>,
-     * <code>End</code> <code>DetectOS</code>, or anything else that changes the
-     * internal <code>PAGE_RES</code>. See <code>apitypes.h</code> for the
-     * definition of <code>PageIteratorLevel</code>. See also
-     * <code>ResultIterator</code>, derived from <code>PageIterator</code>,
-     * which adds in the ability to access OCR output with text-specific
-     * methods.
-     */
     public static class TessPageIterator extends PointerType {
 
         public TessPageIterator(Pointer address) {
@@ -813,10 +762,7 @@ public interface TessAPI extends Library {
             super();
         }
     };
-    
-    /**
-     * MutableIterator adds access to internal data structures.
-     */
+
     public static class TessMutableIterator extends PointerType {
 
         public TessMutableIterator(Pointer address) {
@@ -827,12 +773,7 @@ public interface TessAPI extends Library {
             super();
         }
     };
-    
-    /**
-     * Iterator for tesseract results that is capable of iterating in proper
-     * reading order over Bi Directional (e.g. mixed Hebrew and English) text.
-     * ResultIterator adds text-specific methods for access to OCR output.
-     */
+
     public static class TessResultIterator extends PointerType {
 
         public TessResultIterator(Pointer address) {
@@ -840,41 +781,6 @@ public interface TessAPI extends Library {
         }
 
         public TessResultIterator() {
-            super();
-        }
-    };
-    
-    public static class TessChoiceIterator extends PointerType {
-
-        public TessChoiceIterator(Pointer address) {
-            super(address);
-        }
-
-        public TessChoiceIterator() {
-            super();
-        }
-    };
-    
-    /**
-     * Interface for rendering tesseract results into a document, such as text,
-     * HOCR or pdf. This class is abstract. Specific classes handle individual
-     * formats. This interface is then used to inject the renderer class into
-     * tesseract when processing images.
-     *     
-     * For simplicity implementing this with tesseract version 3.01, the
-     * renderer contains document state that is cleared from document to
-     * document just as the TessBaseAPI is. This way the base API can just
-     * delegate its rendering functionality to injected renderers, and the
-     * renderers can manage the associated state needed for the specific formats
-     * in addition to the heuristics for producing it.
-     */
-    public static class TessResultRenderer extends PointerType {
-
-        public TessResultRenderer(Pointer address) {
-            super(address);
-        }
-
-        public TessResultRenderer() {
             super();
         }
     };
