@@ -24,26 +24,6 @@ import java.lang.reflect.Modifier;
 public class Utils {
 
     /**
-     * Writes byte array to file.
-     *
-     * @param data byte array
-     * @param outFile output file
-     * @throws IOException
-     */
-    public static void writeFile(byte[] data, File outFile) throws IOException {
-        FileOutputStream fos = null;
-
-        try {
-            fos = new FileOutputStream(outFile);
-            fos.write(data);
-        } finally {
-            if (fos != null) {
-                fos.close();
-            }
-        }
-    }
-
-    /**
      * Gets user-friendly name of the public static final constant defined in a
      * class or an interface for display purpose.
      *
