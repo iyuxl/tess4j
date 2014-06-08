@@ -38,7 +38,12 @@ Version 1.2 (22 September 2013)
 - Various minor improvements
 - Update JNA to v4.0
 
-Version 2.0 Beta (12 May 2014)
-- Upgrade to Tesseract 3.03 DLL r1101
+Version 1.3 (31 May 2014)
 - Update JNA to v4.1.0
 - Update Ghost4J to v0.5.1
+- Refactoring
+- Bundle Tesseract and Leptonica 64-bit DLLs
+
+Version 2.0 Beta (7 June 2014)
+- Upgrade to Tesseract 3.03 DLL r1115
+- Maven-enabled
