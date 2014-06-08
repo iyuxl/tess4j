@@ -27,6 +27,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.IIOImage;
+import net.sourceforge.tess4j.util.Utils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -157,7 +158,9 @@ public class Tesseract1Test {
         
         Tess1Extension instance1 = new Tess1Extension();
         instance1.setDatapath(this.datapath);
-        List<Word> result = instance1.getWords(imageFile);
+        int pageIteratorLevel = TessAPI1.TessPageIteratorLevel.RIL_WORD;
+        System.out.println("PageIteratorLevel: " + Utils.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
+        List<Word> result = instance1.getWords(imageFile, pageIteratorLevel);
         
         //print the complete result
         for (Word word : result) {
@@ -174,7 +177,7 @@ public class Tesseract1Test {
 
     class Tess1Extension extends Tesseract1 {
 
-        public List<Word> getWords(File file) {
+        public List<Word> getWords(File file, int pageIteratorLevel) {
             this.init();
             this.setTessVariables();
 
@@ -189,22 +192,22 @@ public class Tesseract1Test {
                 TessAPI1.TessPageIteratorBegin(pi);
 
                 do {
-                    Pointer ptr = TessAPI1.TessResultIteratorGetUTF8Text(ri, TessAPI1.TessPageIteratorLevel.RIL_WORD);
+                    Pointer ptr = TessAPI1.TessResultIteratorGetUTF8Text(ri, pageIteratorLevel);
                     String text = ptr.getString(0);
                     TessAPI1.TessDeleteText(ptr);
-                    float confidence = TessAPI1.TessResultIteratorConfidence(ri, TessAPI1.TessPageIteratorLevel.RIL_WORD);
+                    float confidence = TessAPI1.TessResultIteratorConfidence(ri, pageIteratorLevel);
                     IntBuffer leftB = IntBuffer.allocate(1);
                     IntBuffer topB = IntBuffer.allocate(1);
                     IntBuffer rightB = IntBuffer.allocate(1);
                     IntBuffer bottomB = IntBuffer.allocate(1);
-                    TessAPI1.TessPageIteratorBoundingBox(pi, TessAPI1.TessPageIteratorLevel.RIL_WORD, leftB, topB, rightB, bottomB);
+                    TessAPI1.TessPageIteratorBoundingBox(pi, pageIteratorLevel, leftB, topB, rightB, bottomB);
                     int left = leftB.get();
                     int top = topB.get();
                     int right = rightB.get();
                     int bottom = bottomB.get();
                     Word word = new Word(text, confidence, new Rectangle(left, top, right - left, bottom - top));
                     words.add(word);
-                } while (TessAPI1.TessPageIteratorNext(pi, TessAPI1.TessPageIteratorLevel.RIL_WORD) == TessAPI1.TRUE);
+                } while (TessAPI1.TessPageIteratorNext(pi, pageIteratorLevel) == TessAPI1.TRUE);
 
                 return words;
             } catch (Exception e) {
