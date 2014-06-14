@@ -1,6 +1,4 @@
-Tess4J
-
-## Description:
+## Tess4J
 
 A Java JNA wrapper for [Tesseract OCR API v3.02](http://code.google.com/p/tesseract-ocr/).
 
