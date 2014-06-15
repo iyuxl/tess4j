@@ -13,29 +13,30 @@ public class ImageDeskew {
     public class HoughLine {
 
         // count of points in the line
-        public int count = 0;
+        public int    count = 0;
         // index in matrix.
-        public int index = 0;
+        public int    index = 0;
         // the line is represented as all x, y that solve y * cos(alpha) - x *
         // sin(alpha) = d
         public double alpha;
         public double d;
     }
+
     // the source image
     private BufferedImage cImage;
     // the range of angles to search for lines
-    private double cAlphaStart = -20;
-    private double cAlphaStep = 0.2;
-    private int cSteps = 40 * 5;
+    private double        cAlphaStart = -20;
+    private double        cAlphaStep  = 0.2;
+    private int           cSteps      = 40 * 5;
     // pre-calculation of sin and cos
-    private double[] cSinA;
-    private double[] cCosA;
+    private double[]      cSinA;
+    private double[]      cCosA;
     // range of d
-    private double cDMin;
-    private double cDStep = 1.0;
-    private int cDCount;
+    private double        cDMin;
+    private double        cDStep      = 1.0;
+    private int           cDCount;
     // count of points that fit in a line
-    private int[] cHMatrix;
+    private int[]         cHMatrix;
 
     // constructor
     public ImageDeskew(BufferedImage image) {
@@ -91,7 +92,7 @@ public class ImageDeskew {
 
         int alphaIndex;
         int dIndex;
-        
+
         for (int i = 0; i < count; i++) {
             dIndex = hl[i].index / cSteps; // integer division, no
             // remainder

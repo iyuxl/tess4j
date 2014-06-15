@@ -1,5 +1,5 @@
 /**
- * Copyright @ 2008 Quan Nguyen
+ * Copyright @ 2014 Quan Nguyen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -54,20 +54,18 @@ import com.sun.media.imageio.plugins.tiff.TIFFTag;
 
 public class ImageIOHelper {
 
-    final static String OUTPUT_FILE_NAME = "Tesstmp";
-    final static String TIFF_EXT = ".tif";
-    final static String TIFF_FORMAT = "tiff";
+    final static String OUTPUT_FILE_NAME         = "Tesstmp";
+    final static String TIFF_EXT                 = ".tif";
+    final static String TIFF_FORMAT              = "tiff";
     final static String JAI_IMAGE_WRITER_MESSAGE = "Need to install JAI Image I/O package.\nhttps://java.net/projects/jai-imageio/";
     final static String JAI_IMAGE_READER_MESSAGE = "Unsupported image format. May need to install JAI Image I/O package.\nhttps://java.net/projects/jai-imageio/";
 
     /**
-     * Creates a list of TIFF image files from an image file. It basically
-     * converts images of other formats to TIFF format, or a multi-page TIFF
-     * image to multiple TIFF image files.
-     *
+     * Creates a list of TIFF image files from an image file. It basically converts images of other formats to TIFF
+     * format, or a multi-page TIFF image to multiple TIFF image files.
+     * 
      * @param imageFile input image file
-     * @param index an index of the page; -1 means all pages, as in a multi-page
-     * TIFF image
+     * @param index an index of the page; -1 means all pages, as in a multi-page TIFF image
      * @return a list of TIFF image files
      * @throws IOException while processing files
      */
@@ -78,7 +76,7 @@ public class ImageIOHelper {
         String imageFormat = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
 
         Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName(imageFormat);
-        
+
         if (!readers.hasNext()) {
             throw new RuntimeException(JAI_IMAGE_READER_MESSAGE);
         }
@@ -87,23 +85,23 @@ public class ImageIOHelper {
 
         ImageInputStream iis = ImageIO.createImageInputStream(imageFile);
         reader.setInput(iis);
-        //Read the stream metadata
-//        IIOMetadata streamMetadata = reader.getStreamMetadata();
+        // Read the stream metadata
+        // IIOMetadata streamMetadata = reader.getStreamMetadata();
 
-        //Set up the writeParam
+        // Set up the writeParam
         TIFFImageWriteParam tiffWriteParam = new TIFFImageWriteParam(Locale.US);
         tiffWriteParam.setCompressionMode(ImageWriteParam.MODE_DISABLED);
 
-        //Get tif writer and set output to file
+        // Get tif writer and set output to file
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(TIFF_FORMAT);
-         
+
         if (!writers.hasNext()) {
             throw new RuntimeException(JAI_IMAGE_WRITER_MESSAGE);
         }
-        
+
         ImageWriter writer = writers.next();
 
-        //Read the stream metadata
+        // Read the stream metadata
         IIOMetadata streamMetadata = writer.getDefaultStreamMetadata(tiffWriteParam);
 
         int imageTotal = reader.getNumImages(true);
@@ -111,8 +109,8 @@ public class ImageIOHelper {
         for (int i = 0; i < imageTotal; i++) {
             // all if index == -1; otherwise, only index-th
             if (index == -1 || i == index) {
-//                BufferedImage bi = reader.read(i);
-//                IIOImage oimage = new IIOImage(bi, null, reader.getImageMetadata(i));
+                // BufferedImage bi = reader.read(i);
+                // IIOImage oimage = new IIOImage(bi, null, reader.getImageMetadata(i));
                 IIOImage oimage = reader.readAll(i, reader.getDefaultReadParam());
                 File tiffFile = File.createTempFile(OUTPUT_FILE_NAME, TIFF_EXT);
                 ImageOutputStream ios = ImageIO.createImageOutputStream(tiffFile);
@@ -129,9 +127,8 @@ public class ImageIOHelper {
     }
 
     /**
-     * Creates a list of TIFF image files from a list of
-     * <code>IIOImage</code> objects.
-     *
+     * Creates a list of TIFF image files from a list of <code>IIOImage</code> objects.
+     * 
      * @param imageList a list of <code>IIOImage</code> objects
      * @param index an index of the page; -1 means all pages
      * @return a list of TIFF image files
@@ -141,23 +138,24 @@ public class ImageIOHelper {
         return createTiffFiles(imageList, index, 0, 0);
     }
 
-    public static List<File> createTiffFiles(List<IIOImage> imageList, int index, int dpiX, int dpiY) throws IOException {
+    public static List<File> createTiffFiles(List<IIOImage> imageList, int index, int dpiX, int dpiY)
+            throws IOException {
         List<File> tiffFiles = new ArrayList<File>();
 
-        //Set up the writeParam
+        // Set up the writeParam
         TIFFImageWriteParam tiffWriteParam = new TIFFImageWriteParam(Locale.US);
         tiffWriteParam.setCompressionMode(ImageWriteParam.MODE_DISABLED);
 
-        //Get tif writer and set output to file
+        // Get tif writer and set output to file
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(TIFF_FORMAT);
 
         if (!writers.hasNext()) {
             throw new RuntimeException(JAI_IMAGE_WRITER_MESSAGE);
         }
-        
+
         ImageWriter writer = writers.next();
 
-        //Get the stream metadata
+        // Get the stream metadata
         IIOMetadata streamMetadata = writer.getDefaultStreamMetadata(tiffWriteParam);
 
         // all if index == -1; otherwise, only index-th
@@ -196,10 +194,8 @@ public class ImageIOHelper {
         TIFFTag tagYRes = base.getTag(BaselineTIFFTagSet.TAG_Y_RESOLUTION);
 
         // Create {X,Y}Resolution fields.
-        TIFFField fieldXRes = new TIFFField(tagXRes, TIFFTag.TIFF_RATIONAL,
-                1, new long[][]{{dpiX, 1}});
-        TIFFField fieldYRes = new TIFFField(tagYRes, TIFFTag.TIFF_RATIONAL,
-                1, new long[][]{{dpiY, 1}});
+        TIFFField fieldXRes = new TIFFField(tagXRes, TIFFTag.TIFF_RATIONAL, 1, new long[][] { { dpiX, 1 } });
+        TIFFField fieldYRes = new TIFFField(tagYRes, TIFFTag.TIFF_RATIONAL, 1, new long[][] { { dpiY, 1 } });
 
         // Append {X,Y}Resolution fields to directory.
         dir.addTIFFField(fieldXRes);
@@ -211,7 +207,7 @@ public class ImageIOHelper {
 
     /**
      * Gets pixel data of an <code>IIOImage</code> object.
-     *
+     * 
      * @param image an <code>IIOImage</code> object
      * @return a byte buffer of pixel data
      * @throws IOException
@@ -219,37 +215,38 @@ public class ImageIOHelper {
     public static ByteBuffer getImageByteBuffer(IIOImage image) throws IOException {
         return getImageByteBuffer(image.getRenderedImage());
     }
-    
+
     /**
      * Gets pixel data of an <code>RenderedImage</code> object.
+     * 
      * @param image an <code>RenderedImage</code> object
      * @return a byte buffer of pixel data
-     * @throws IOException 
+     * @throws IOException
      */
     public static ByteBuffer getImageByteBuffer(RenderedImage image) throws IOException {
-        //Set up the writeParam
+        // Set up the writeParam
         TIFFImageWriteParam tiffWriteParam = new TIFFImageWriteParam(Locale.US);
         tiffWriteParam.setCompressionMode(ImageWriteParam.MODE_DISABLED);
 
-        //Get tif writer and set output to file
+        // Get tif writer and set output to file
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(TIFF_FORMAT);
-        
+
         if (!writers.hasNext()) {
             throw new RuntimeException(JAI_IMAGE_WRITER_MESSAGE);
         }
 
         ImageWriter writer = writers.next();
-        
-        //Get the stream metadata
+
+        // Get the stream metadata
         IIOMetadata streamMetadata = writer.getDefaultStreamMetadata(tiffWriteParam);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageOutputStream ios = ImageIO.createImageOutputStream(outputStream);
         writer.setOutput(ios);
         writer.write(streamMetadata, new IIOImage(image, null, null), tiffWriteParam);
-//        writer.write(image);
+        // writer.write(image);
         writer.dispose();
-//        ImageIO.write(image, "tiff", ios); // this can be used in lieu of writer
+        // ImageIO.write(image, "tiff", ios); // this can be used in lieu of writer
         ios.seek(0);
         BufferedImage bi = ImageIO.read(ios);
         return convertImageData(bi);
@@ -270,7 +267,7 @@ public class ImageIOHelper {
             buff = bi.getRaster().getDataBuffer();
         }
         byte[] pixelData = ((DataBufferByte) buff).getData();
-        //        return ByteBuffer.wrap(pixelData);
+        // return ByteBuffer.wrap(pixelData);
         ByteBuffer buf = ByteBuffer.allocateDirect(pixelData.length);
         buf.order(ByteOrder.nativeOrder());
         buf.put(pixelData);
@@ -280,10 +277,9 @@ public class ImageIOHelper {
 
     /**
      * Gets a list of <code>IIOImage</code> objects for an image file.
-     *
-     * @param imageFile input image file. It can be any of the supported
-     * formats, including TIFF, JPEG, GIF, PNG, BMP, JPEG, and PDF if GPL
-     * Ghostscript is installed
+     * 
+     * @param imageFile input image file. It can be any of the supported formats, including TIFF, JPEG, GIF, PNG, BMP,
+     * JPEG, and PDF if GPL Ghostscript is installed
      * @return a list of <code>IIOImage</code> objects
      * @throws IOException while processing files.
      */
@@ -310,7 +306,7 @@ public class ImageIOHelper {
                 imageFormat = "jpeg2000";
             }
             Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName(imageFormat);
-            
+
             if (!readers.hasNext()) {
                 throw new RuntimeException(JAI_IMAGE_READER_MESSAGE);
             }
@@ -322,7 +318,7 @@ public class ImageIOHelper {
             int imageTotal = reader.getNumImages(true);
 
             for (int i = 0; i < imageTotal; i++) {
-//                IIOImage oimage = new IIOImage(reader.read(i), null, reader.getImageMetadata(i));
+                // IIOImage oimage = new IIOImage(reader.read(i), null, reader.getImageMetadata(i));
                 IIOImage oimage = reader.readAll(i, reader.getDefaultReadParam());
                 iioImageList.add(oimage);
             }
@@ -347,9 +343,10 @@ public class ImageIOHelper {
 
     /**
      * Gets a list of <code>IIOImage</code> objects for a <code>BufferedImage</code>.
+     * 
      * @param bi input image
      * @return a list of <code>IIOImage</code> objects
-     * @throws IOException 
+     * @throws IOException
      */
     public static List<IIOImage> getIIOImageList(BufferedImage bi) throws IOException {
         List<IIOImage> iioImageList = new ArrayList<IIOImage>();
@@ -357,10 +354,10 @@ public class ImageIOHelper {
         iioImageList.add(oimage);
         return iioImageList;
     }
-    
+
     /**
      * Merges multiple images into one TIFF image.
-     *
+     * 
      * @param inputImages an array of image files
      * @param outputTiff the output TIFF file
      * @throws IOException while processing files.
@@ -378,18 +375,18 @@ public class ImageIOHelper {
         }
 
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(TIFF_FORMAT);
-        
+
         if (!writers.hasNext()) {
             throw new RuntimeException(JAI_IMAGE_WRITER_MESSAGE);
         }
-                
+
         ImageWriter writer = writers.next();
 
-        //Set up the writeParam
+        // Set up the writeParam
         TIFFImageWriteParam tiffWriteParam = new TIFFImageWriteParam(Locale.US);
         tiffWriteParam.setCompressionMode(ImageWriteParam.MODE_DISABLED);
 
-        //Get the stream metadata
+        // Get the stream metadata
         IIOMetadata streamMetadata = writer.getDefaultStreamMetadata(tiffWriteParam);
 
         ImageOutputStream ios = ImageIO.createImageOutputStream(outputTiff);
@@ -409,7 +406,7 @@ public class ImageIOHelper {
 
     /**
      * Reads image meta data.
-     *
+     * 
      * @param oimage
      * @return a map of meta data
      */

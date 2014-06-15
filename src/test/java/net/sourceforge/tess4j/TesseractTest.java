@@ -1,5 +1,5 @@
 /**
- * Copyright @ 2010 Quan Nguyen
+ * Copyright @ 2014 Quan Nguyen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -37,11 +37,11 @@ import org.junit.Test;
 import com.recognition.software.jdeskew.ImageDeskew;
 
 public class TesseractTest {
-    static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
-    Tesseract instance;
+    static final double  MINIMUM_DESKEW_THRESHOLD = 0.05d;
+    Tesseract            instance;
 
-    private final String datapath = "src/main/resources";
-    private final String testResourcesDataPath = "src/test/resources/test-data";
+    private final String datapath                 = "src/main/resources";
+    private final String testResourcesDataPath    = "src/test/resources/test-data";
 
     public TesseractTest() {
     }
@@ -66,6 +66,7 @@ public class TesseractTest {
 
     /**
      * Test of doOCR method, of class Tesseract.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -81,6 +82,7 @@ public class TesseractTest {
 
     /**
      * Test of doOCR method, of class Tesseract.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -97,6 +99,7 @@ public class TesseractTest {
 
     /**
      * Test of doOCR method, of class Tesseract.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -113,6 +116,7 @@ public class TesseractTest {
 
     /**
      * Test of doOCR method, of class Tesseract.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -129,6 +133,7 @@ public class TesseractTest {
 
     /**
      * Test of deskew algorithm.
+     * 
      * @throws Exception while processing image.
      */
     @Test

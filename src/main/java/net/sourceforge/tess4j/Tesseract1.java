@@ -1,5 +1,5 @@
 /**
- * Copyright @ 2012 Quan Nguyen
+ * Copyright @ 2014 Quan Nguyen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,31 +26,30 @@ import java.util.logging.*;
 import javax.imageio.IIOImage;
 
 /**
- * An object layer on top of <code>TessAPI1</code>, provides character
- * recognition support for common image formats, and multi-page TIFF images
- * beyond the uncompressed, binary TIFF format supported by Tesseract OCR
- * engine. The extended capabilities are provided by the
- * <code>Java Advanced Imaging Image I/O Tools</code>. <br /><br /> Support for
- * PDF documents is available through <code>Ghost4J</code>, a <code>JNA</code>
- * wrapper for <code>GPL Ghostscript</code>, which should be installed and
- * included in system path. <br /><br /> Any program that uses the library will
- * need to ensure that the required libraries (the <code>.jar</code> files for
- * <code>jna</code>, <code>jai-imageio</code>, and <code>ghost4j</code>) are in
- * its compile and run-time <code>classpath</code>.
+ * An object layer on top of <code>TessAPI1</code>, provides character recognition support for common image formats, and
+ * multi-page TIFF images beyond the uncompressed, binary TIFF format supported by Tesseract OCR engine. The extended
+ * capabilities are provided by the <code>Java Advanced Imaging Image I/O Tools</code>. <br />
+ * <br />
+ * Support for PDF documents is available through <code>Ghost4J</code>, a <code>JNA</code> wrapper for
+ * <code>GPL Ghostscript</code>, which should be installed and included in system path. <br />
+ * <br />
+ * Any program that uses the library will need to ensure that the required libraries (the <code>.jar</code> files for
+ * <code>jna</code>, <code>jai-imageio</code>, and <code>ghost4j</code>) are in its compile and run-time
+ * <code>classpath</code>.
  */
 public class Tesseract1 extends TessAPI1 implements ITesseract {
 
-    private String language = "eng";
-    private String datapath = "./";
-    private int psm = TessAPI1.TessPageSegMode.PSM_AUTO;
-    private boolean hocr;
-    private int pageNum;
-    private int ocrEngineMode = TessAPI1.TessOcrEngineMode.OEM_DEFAULT;
-    private final Properties prop = new Properties();
+    private String              language      = "eng";
+    private String              datapath      = "./";
+    private int                 psm           = TessAPI1.TessPageSegMode.PSM_AUTO;
+    private boolean             hocr;
+    private int                 pageNum;
+    private int                 ocrEngineMode = TessAPI1.TessOcrEngineMode.OEM_DEFAULT;
+    private final Properties    prop          = new Properties();
 
-    private TessBaseAPI handle;
+    private TessBaseAPI         handle;
 
-    private final static Logger logger = Logger.getLogger(Tesseract1.class.getName());
+    private final static Logger logger        = Logger.getLogger(Tesseract1.class.getName());
 
     /**
      * Public constructor.
@@ -69,7 +68,7 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Sets language for OCR.
-     *
+     * 
      * @param language the language code, which follows ISO 639-3 standard.
      */
     @Override
@@ -79,7 +78,7 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Sets OCR engine mode.
-     *
+     * 
      * @param ocrEngineMode the OcrEngineMode to set
      */
     @Override
@@ -97,7 +96,7 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Enables hocr output.
-     *
+     * 
      * @param hocr to enable or disable hocr output
      */
     public void setHocr(boolean hocr) {
@@ -107,11 +106,9 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Set the value of Tesseract's internal parameter.
-     *
-     * @param key variable name, e.g., <code>tessedit_create_hocr</code>,
-     * <code>tessedit_char_whitelist</code>, etc.
-     * @param value value for corresponding variable, e.g., "1", "0",
-     * "0123456789", etc.
+     * 
+     * @param key variable name, e.g., <code>tessedit_create_hocr</code>, <code>tessedit_char_whitelist</code>, etc.
+     * @param value value for corresponding variable, e.g., "1", "0", "0123456789", etc.
      */
     @Override
     public void setTessVariable(String key, String value) {
@@ -129,7 +126,7 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Performs OCR operation.
-     *
+     * 
      * @param imageFile an image file
      * @return the recognized text
      * @throws TesseractException
@@ -141,11 +138,10 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Performs OCR operation.
-     *
+     * 
      * @param imageFile an image file
-     * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or <code>null</code> indicates
-     * the whole image.
+     * @param rect the bounding rectangle defines the region of the image to be recognized. A rectangle of zero
+     * dimension or <code>null</code> indicates the whole image.
      * @return the recognized text
      * @throws TesseractException
      */
@@ -161,7 +157,7 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Performs OCR operation.
-     *
+     * 
      * @param bi a buffered image
      * @return the recognized text
      * @throws TesseractException
@@ -173,11 +169,10 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Performs OCR operation.
-     *
+     * 
      * @param bi a buffered image
-     * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or <code>null</code> indicates
-     * the whole image.
+     * @param rect the bounding rectangle defines the region of the image to be recognized. A rectangle of zero
+     * dimension or <code>null</code> indicates the whole image.
      * @return the recognized text
      * @throws TesseractException
      */
@@ -193,11 +188,10 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Performs OCR operation.
-     *
+     * 
      * @param imageList a list of <code>IIOImage</code> objects
-     * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or <code>null</code> indicates
-     * the whole image.
+     * @param rect the bounding rectangle defines the region of the image to be recognized. A rectangle of zero
+     * dimension or <code>null</code> indicates the whole image.
      * @return the recognized text
      * @throws TesseractException
      */
@@ -231,18 +225,16 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
     }
 
     /**
-     * Performs OCR operation. Use <code>SetImage</code>, (optionally)
-     * <code>SetRectangle</code>, and one or more of the <code>Get*Text</code>
-     * functions.
-     *
+     * Performs OCR operation. Use <code>SetImage</code>, (optionally) <code>SetRectangle</code>, and one or more of the
+     * <code>Get*Text</code> functions.
+     * 
      * @param xsize width of image
      * @param ysize height of image
      * @param buf pixel data
-     * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or <code>null</code> indicates
-     * the whole image.
-     * @param bpp bits per pixel, represents the bit depth of the image, with 1
-     * for binary bitmap, 8 for gray, and 24 for color RGB.
+     * @param rect the bounding rectangle defines the region of the image to be recognized. A rectangle of zero
+     * dimension or <code>null</code> indicates the whole image.
+     * @param bpp bits per pixel, represents the bit depth of the image, with 1 for binary bitmap, 8 for gray, and 24
+     * for color RGB.
      * @return the recognized text
      * @throws TesseractException
      */
@@ -287,20 +279,20 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
      * A wrapper for {@link #setImage(int, int, ByteBuffer, Rectangle, int)}.
      */
     protected void setImage(RenderedImage image, Rectangle rect) throws IOException {
-        setImage(image.getWidth(), image.getHeight(), ImageIOHelper.getImageByteBuffer(image), rect, image.getColorModel().getPixelSize());
+        setImage(image.getWidth(), image.getHeight(), ImageIOHelper.getImageByteBuffer(image), rect, image
+                .getColorModel().getPixelSize());
     }
 
     /**
      * Sets image to be processed.
-     *
+     * 
      * @param xsize width of image
      * @param ysize height of image
      * @param buf pixel data
-     * @param rect the bounding rectangle defines the region of the image to be
-     * recognized. A rectangle of zero dimension or <code>null</code> indicates
-     * the whole image.
-     * @param bpp bits per pixel, represents the bit depth of the image, with 1
-     * for binary bitmap, 8 for gray, and 24 for color RGB.
+     * @param rect the bounding rectangle defines the region of the image to be recognized. A rectangle of zero
+     * dimension or <code>null</code> indicates the whole image.
+     * @param bpp bits per pixel, represents the bit depth of the image, with 1 for binary bitmap, 8 for gray, and 24
+     * for color RGB.
      */
     protected void setImage(int xsize, int ysize, ByteBuffer buf, Rectangle rect, int bpp) {
         int bytespp = bpp / 8;
@@ -314,7 +306,7 @@ public class Tesseract1 extends TessAPI1 implements ITesseract {
 
     /**
      * Gets recognized text.
-     *
+     * 
      * @return the recognized text
      */
     protected String getOCRText() {

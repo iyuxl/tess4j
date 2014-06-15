@@ -1,5 +1,5 @@
 /**
- * Copyright @ 2012 Quan Nguyen
+ * Copyright @ 2014 Quan Nguyen
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -79,6 +79,7 @@ public class TessAPI1Test {
 
     /**
      * Test of TessBaseAPIRect method, of class TessDllAPI1.
+     * 
      * @throws Exception while processing the image
      */
     @Test
@@ -103,6 +104,7 @@ public class TessAPI1Test {
 
     /**
      * Test of TessBaseAPIGetUTF8Text method, of class TessDllAPI1.
+     * 
      * @throws Exception while processing the image
      */
     @Test
@@ -212,6 +214,7 @@ public class TessAPI1Test {
 
     /**
      * Test of TessBaseAPIPrintVariables method, of class TessAPI1.
+     * 
      * @throws Exception while persisting variables into a file.
      */
     @Test
@@ -375,6 +378,7 @@ public class TessAPI1Test {
 
     /**
      * Test of TessBaseAPIGetHOCRText method, of class TessAPI1.
+     * 
      * @throws Exception while getting ocr text from image.
      */
     @Test
@@ -399,6 +403,7 @@ public class TessAPI1Test {
 
     /**
      * Test of Orientation and script detection (OSD).
+     * 
      * @throws Exception while processing the image.
      */
     @Test

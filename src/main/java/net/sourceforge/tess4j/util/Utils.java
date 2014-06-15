@@ -1,5 +1,5 @@
 /**
- * Copyright @ 2013 Quan Nguyen
+ * Copyright @ 2014 Quan Nguyen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,9 +21,9 @@ import java.lang.reflect.Modifier;
 public class Utils {
 
     /**
-     * Gets user-friendly name of the public static final constant defined in a class or an
-     * interface for display purpose.
-     *
+     * Gets user-friendly name of the public static final constant defined in a class or an interface for display
+     * purpose.
+     * 
      * @param value the constant value
      * @param c type of class or interface
      * @return name

@@ -1,5 +1,5 @@
 /**
- * Copyright @ 2009 Quan Nguyen
+ * Copyright @ 2014 Quan Nguyen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,18 +31,18 @@ import org.ghost4j.GhostscriptException;
 
 public class PdfUtilities {
 
-    public static final String GS_INSTALL = "\nPlease download, install GPL Ghostscript from http://sourceforge.net/projects/ghostscript/files\nand/or set the appropriate environment variable.";
+    public static final String  GS_INSTALL = "\nPlease download, install GPL Ghostscript from http://sourceforge.net/projects/ghostscript/files\nand/or set the appropriate environment variable.";
 
-    private final static Logger logger = Logger.getLogger(PdfUtilities.class.getName());
+    private final static Logger logger     = Logger.getLogger(PdfUtilities.class.getName());
 
     /**
      * Convert PDF to TIFF format.
-     *
+     * 
      * @param inputPdfFile
      * @return a multi-page TIFF image
      * @throws IOException while processing files.
      */
-    public static File convertPdf2Tiff(File inputPdfFile) throws IOException  {
+    public static File convertPdf2Tiff(File inputPdfFile) throws IOException {
         File[] pngFiles = null;
 
         try {
@@ -68,7 +68,7 @@ public class PdfUtilities {
 
     /**
      * Convert PDF to PNG format.
-     *
+     * 
      * @param inputPdfFile
      * @return an array of PNG images
      */
@@ -80,11 +80,11 @@ public class PdfUtilities {
             imageDir = new File(userDir);
         }
 
-        //get Ghostscript instance
+        // get Ghostscript instance
         Ghostscript gs = Ghostscript.getInstance();
 
-        //prepare Ghostscript interpreter parameters
-        //refer to Ghostscript documentation for parameter usage
+        // prepare Ghostscript interpreter parameters
+        // refer to Ghostscript documentation for parameter usage
         List<String> gsArgs = new ArrayList<String>();
         gsArgs.add("-gs");
         gsArgs.add("-dNOPAUSE");
@@ -97,7 +97,7 @@ public class PdfUtilities {
         gsArgs.add("-sOutputFile=" + imageDir.getPath() + "/workingimage%03d.png");
         gsArgs.add(inputPdfFile.getPath());
 
-        //execute and exit interpreter
+        // execute and exit interpreter
         try {
             gs.initialize(gsArgs.toArray(new String[0]));
             gs.exit();
@@ -120,24 +120,25 @@ public class PdfUtilities {
                 return f1.getName().compareTo(f2.getName());
             }
         });
-        
+
         return workingFiles;
     }
 
     /**
      * Split PDF.
+     * 
      * @param inputPdfFile
      * @param outputPdfFile
      * @param firstPage
      * @param lastPage
      */
     public static void splitPdf(String inputPdfFile, String outputPdfFile, String firstPage, String lastPage) {
-        //get Ghostscript instance
+        // get Ghostscript instance
         Ghostscript gs = Ghostscript.getInstance();
 
-        //prepare Ghostscript interpreter parameters
-        //refer to Ghostscript documentation for parameter usage
-        //gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -dFirstPage=m -dLastPage=n -sOutputFile=out.pdf in.pdf
+        // prepare Ghostscript interpreter parameters
+        // refer to Ghostscript documentation for parameter usage
+        // gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -dFirstPage=m -dLastPage=n -sOutputFile=out.pdf in.pdf
         List<String> gsArgs = new ArrayList<String>();
         gsArgs.add("-gs");
         gsArgs.add("-dNOPAUSE");
@@ -156,7 +157,7 @@ public class PdfUtilities {
         gsArgs.add("-sOutputFile=" + outputPdfFile);
         gsArgs.add(inputPdfFile);
 
-        //execute and exit interpreter
+        // execute and exit interpreter
         try {
             gs.initialize(gsArgs.toArray(new String[0]));
             gs.exit();
@@ -172,17 +173,17 @@ public class PdfUtilities {
 
     /**
      * Get PDF Page Count.
-     *
+     * 
      * @param inputPdfFile
      * @return number of pages
      */
     public static int getPdfPageCount(String inputPdfFile) {
-        //get Ghostscript instance
+        // get Ghostscript instance
         Ghostscript gs = Ghostscript.getInstance();
 
-        //prepare Ghostscript interpreter parameters
-        //refer to Ghostscript documentation for parameter usage
-        //gs -q -sPDFname=test.pdf pdfpagecount.ps
+        // prepare Ghostscript interpreter parameters
+        // refer to Ghostscript documentation for parameter usage
+        // gs -q -sPDFname=test.pdf pdfpagecount.ps
         List<String> gsArgs = new ArrayList<String>();
         gsArgs.add("-gs");
         gsArgs.add("-dNOPAUSE");
@@ -194,9 +195,9 @@ public class PdfUtilities {
         int pageCount = 0;
         ByteArrayOutputStream os = null;
 
-        //execute and exit interpreter
+        // execute and exit interpreter
         try {
-            //output
+            // output
             os = new ByteArrayOutputStream();
             gs.setStdOut(os);
             gs.initialize(gsArgs.toArray(new String[0]));
@@ -218,12 +219,12 @@ public class PdfUtilities {
      * @param outputPdfFile
      */
     public static void mergePdf(File[] inputPdfFiles, File outputPdfFile) {
-        //get Ghostscript instance
+        // get Ghostscript instance
         Ghostscript gs = Ghostscript.getInstance();
 
-        //prepare Ghostscript interpreter parameters
-        //refer to Ghostscript documentation for parameter usage
-        //gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out.pdf in1.pdf in2.pdf in3.pdf
+        // prepare Ghostscript interpreter parameters
+        // refer to Ghostscript documentation for parameter usage
+        // gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out.pdf in1.pdf in2.pdf in3.pdf
         List<String> gsArgs = new ArrayList<String>();
         gsArgs.add("-gs");
         gsArgs.add("-dNOPAUSE");
@@ -236,7 +237,7 @@ public class PdfUtilities {
             gsArgs.add(inputPdfFile.getPath());
         }
 
-        //execute and exit interpreter
+        // execute and exit interpreter
         try {
             gs.initialize(gsArgs.toArray(new String[0]));
             gs.exit();

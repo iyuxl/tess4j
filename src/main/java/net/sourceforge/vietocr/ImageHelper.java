@@ -1,5 +1,5 @@
 /**
- * Copyright @ 2008 Quan Nguyen
+ * Copyright @ 2014 Quan Nguyen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -27,17 +27,16 @@ import java.awt.image.*;
 public class ImageHelper {
 
     /**
-     * Convenience method that returns a scaled instance of the provided
-     * {@code BufferedImage}.
-     *
+     * Convenience method that returns a scaled instance of the provided {@code BufferedImage}.
+     * 
      * @param image the original image to be scaled
      * @param targetWidth the desired width of the scaled instance, in pixels
      * @param targetHeight the desired height of the scaled instance, in pixels
      * @return a scaled version of the original {@code BufferedImage}
      */
     public static BufferedImage getScaledInstance(BufferedImage image, int targetWidth, int targetHeight) {
-        int type = (image.getTransparency() == Transparency.OPAQUE)
-                ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        int type = (image.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB
+                : BufferedImage.TYPE_INT_ARGB;
         BufferedImage tmp = new BufferedImage(targetWidth, targetHeight, type);
         Graphics2D g2 = tmp.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -47,21 +46,18 @@ public class ImageHelper {
     }
 
     /**
-     * A replacement for the standard
-     * <code>BufferedImage.getSubimage</code> method.
-     *
+     * A replacement for the standard <code>BufferedImage.getSubimage</code> method.
+     * 
      * @param image
-     * @param x the X coordinate of the upper-left corner of the specified
-     * rectangular region
-     * @param y the Y coordinate of the upper-left corner of the specified
-     * rectangular region
+     * @param x the X coordinate of the upper-left corner of the specified rectangular region
+     * @param y the Y coordinate of the upper-left corner of the specified rectangular region
      * @param width the width of the specified rectangular region
      * @param height the height of the specified rectangular region
      * @return a BufferedImage that is the subimage of <code>image</code>.
      */
     public static BufferedImage getSubImage(BufferedImage image, int x, int y, int width, int height) {
-        int type = (image.getTransparency() == Transparency.OPAQUE)
-                ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        int type = (image.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB
+                : BufferedImage.TYPE_INT_ARGB;
         BufferedImage tmp = new BufferedImage(width, height, type);
         Graphics2D g2 = tmp.createGraphics();
         g2.drawImage(image.getSubimage(x, y, width, height), 0, 0, null);
@@ -71,7 +67,7 @@ public class ImageHelper {
 
     /**
      * A simple method to convert an image to binary or B/W image.
-     *
+     * 
      * @param image input image
      * @return a monochrome image
      */
@@ -82,22 +78,22 @@ public class ImageHelper {
         g2.dispose();
         return tmp;
     }
-    
+
     /**
      * A simple method to convert an image to binary or B/W image.
-     *
+     * 
      * @param image input image
      * @return a monochrome image
-     * @deprecated  As of release 1.1, renamed to {@link #convertImageToBinary(BufferedImage image)}
+     * @deprecated As of release 1.1, renamed to {@link #convertImageToBinary(BufferedImage image)}
      */
     @Deprecated
     public static BufferedImage convertImage2Binary(BufferedImage image) {
         return convertImageToBinary(image);
     }
-    
+
     /**
      * A simple method to convert an image to gray scale.
-     *
+     * 
      * @param image input image
      * @return a monochrome image
      */
@@ -108,7 +104,7 @@ public class ImageHelper {
         g2.dispose();
         return tmp;
     }
-    
+
     private static final short[] invertTable;
 
     static {
@@ -117,7 +113,7 @@ public class ImageHelper {
             invertTable[i] = (short) (255 - i);
         }
     }
-    
+
     /**
      * Inverts image color.
      * 
@@ -145,11 +141,10 @@ public class ImageHelper {
         int h = image.getHeight();
         int newW = (int) Math.floor(w * cos + h * sin);
         int newH = (int) Math.floor(h * cos + w * sin);
-        
+
         BufferedImage tmp = new BufferedImage(newW, newH, image.getType());
         Graphics2D g2d = tmp.createGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
         g2d.translate((newW - w) / 2, (newH - h) / 2);
         g2d.rotate(theta, w / 2, h / 2);
         g2d.drawImage(image, 0, 0, null);
@@ -159,7 +154,7 @@ public class ImageHelper {
 
     /**
      * Gets an image from Clipboard.
-     *
+     * 
      * @return image
      */
     public static Image getClipboardImage() {

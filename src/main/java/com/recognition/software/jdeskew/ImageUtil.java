@@ -3,21 +3,21 @@
  */
 package com.recognition.software.jdeskew;
 
-//import java.awt.Color;
-//import java.awt.Graphics2D;
-//import java.awt.RenderingHints;
-//import java.awt.geom.AffineTransform;
+// import java.awt.Color;
+// import java.awt.Graphics2D;
+// import java.awt.RenderingHints;
+// import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-//import java.io.File;
-//import java.io.IOException;
-//import javax.imageio.ImageIO;
+// import java.io.File;
+// import java.io.IOException;
+// import javax.imageio.ImageIO;
 
 public class ImageUtil {
 
-//    public static BufferedImage readImageFile(File imageFile) throws IOException {
-//        return ImageIO.read(imageFile);
-//    }
+    // public static BufferedImage readImageFile(File imageFile) throws IOException {
+    // return ImageIO.read(imageFile);
+    // }
 
     public static boolean isBlack(BufferedImage image, int x, int y) {
         if (image.getType() == BufferedImage.TYPE_BYTE_BINARY) {
@@ -59,59 +59,59 @@ public class ImageUtil {
         return luminance < luminanceCutOff;
     }
 
-//    public static BufferedImage rotate(BufferedImage image, double angle, int cx, int cy) {
-//        int width = image.getWidth(null);
-//        int height = image.getHeight(null);
-//
-//        int minX, minY, maxX, maxY;
-//        minX = minY = maxX = maxY = 0;
-//
-//        int[] corners = {0, 0, width, 0, width, height, 0, height};
-//
-//        double theta = Math.toRadians(angle);
-//        for (int i = 0; i < corners.length; i += 2) {
-//            int x = (int) (Math.cos(theta) * (corners[i] - cx)
-//                    - Math.sin(theta) * (corners[i + 1] - cy) + cx);
-//            int y = (int) (Math.sin(theta) * (corners[i] - cx)
-//                    + Math.cos(theta) * (corners[i + 1] - cy) + cy);
-//
-//            if (x > maxX) {
-//                maxX = x;
-//            }
-//
-//            if (x < minX) {
-//                minX = x;
-//            }
-//
-//            if (y > maxY) {
-//                maxY = y;
-//            }
-//
-//            if (y < minY) {
-//                minY = y;
-//            }
-//
-//        }
-//
-//        cx = (cx - minX);
-//        cy = (cy - minY);
-//
-//        BufferedImage bi = new BufferedImage((maxX - minX), (maxY - minY),
-//                image.getType());
-//        Graphics2D g2 = bi.createGraphics();
-//        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-//                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-//
-//        g2.setBackground(Color.white);
-//        g2.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-//
-//        AffineTransform at = new AffineTransform();
-//        at.rotate(theta, cx, cy);
-//
-//        g2.setTransform(at);
-//        g2.drawImage(image, -minX, -minY, null);
-//        g2.dispose();
-//
-//        return bi;
-//    }
+    // public static BufferedImage rotate(BufferedImage image, double angle, int cx, int cy) {
+    // int width = image.getWidth(null);
+    // int height = image.getHeight(null);
+    //
+    // int minX, minY, maxX, maxY;
+    // minX = minY = maxX = maxY = 0;
+    //
+    // int[] corners = {0, 0, width, 0, width, height, 0, height};
+    //
+    // double theta = Math.toRadians(angle);
+    // for (int i = 0; i < corners.length; i += 2) {
+    // int x = (int) (Math.cos(theta) * (corners[i] - cx)
+    // - Math.sin(theta) * (corners[i + 1] - cy) + cx);
+    // int y = (int) (Math.sin(theta) * (corners[i] - cx)
+    // + Math.cos(theta) * (corners[i + 1] - cy) + cy);
+    //
+    // if (x > maxX) {
+    // maxX = x;
+    // }
+    //
+    // if (x < minX) {
+    // minX = x;
+    // }
+    //
+    // if (y > maxY) {
+    // maxY = y;
+    // }
+    //
+    // if (y < minY) {
+    // minY = y;
+    // }
+    //
+    // }
+    //
+    // cx = (cx - minX);
+    // cy = (cy - minY);
+    //
+    // BufferedImage bi = new BufferedImage((maxX - minX), (maxY - minY),
+    // image.getType());
+    // Graphics2D g2 = bi.createGraphics();
+    // g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+    // RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+    //
+    // g2.setBackground(Color.white);
+    // g2.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+    //
+    // AffineTransform at = new AffineTransform();
+    // at.rotate(theta, cx, cy);
+    //
+    // g2.setTransform(at);
+    // g2.drawImage(image, -minX, -minY, null);
+    // g2.dispose();
+    //
+    // return bi;
+    // }
 }

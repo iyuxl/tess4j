@@ -1,5 +1,5 @@
 /**
- * Copyright @ 2010 Quan Nguyen
+ * Copyright @ 2014 Quan Nguyen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -43,11 +43,11 @@ import com.sun.jna.Pointer;
 
 public class Tesseract1Test {
 
-    static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
-    Tesseract1 instance;
+    static final double  MINIMUM_DESKEW_THRESHOLD = 0.05d;
+    Tesseract1           instance;
 
-    private final String datapath = "src/main/resources";
-    private final String testResourcesDataPath = "src/test/resources/test-data";
+    private final String datapath                 = "src/main/resources";
+    private final String testResourcesDataPath    = "src/test/resources/test-data";
 
     public Tesseract1Test() {
     }
@@ -72,6 +72,7 @@ public class Tesseract1Test {
 
     /**
      * Test of doOCR method, of class Tesseract1.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -87,6 +88,7 @@ public class Tesseract1Test {
 
     /**
      * Test of doOCR method, of class Tesseract1.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -103,6 +105,7 @@ public class Tesseract1Test {
 
     /**
      * Test of doOCR method, of class Tesseract1.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -119,6 +122,7 @@ public class Tesseract1Test {
 
     /**
      * Test of doOCR method, of class Tesseract1.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -135,6 +139,7 @@ public class Tesseract1Test {
 
     /**
      * Test of deskew algorithm.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -157,6 +162,7 @@ public class Tesseract1Test {
 
     /**
      * Test of extending Tesseract1.
+     * 
      * @throws Exception while processing image.
      */
     @Test
@@ -167,23 +173,24 @@ public class Tesseract1Test {
 
         String expResult = "The (quick) [brown] {fox} jumps!\nOver the $43,456.78 <lazy> #90 dog";
         String[] expResults = expResult.split("\\s");
-        
+
         Tess1Extension instance1 = new Tess1Extension();
         instance1.setDatapath(this.datapath);
         int pageIteratorLevel = TessAPI1.TessPageIteratorLevel.RIL_WORD;
-        System.out.println("PageIteratorLevel: " + Utils.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
+        System.out.println("PageIteratorLevel: "
+                + Utils.getConstantName(pageIteratorLevel, TessAPI1.TessPageIteratorLevel.class));
         List<Word> result = instance1.getWords(imageFile, pageIteratorLevel);
-        
-        //print the complete result
+
+        // print the complete result
         for (Word word : result) {
             System.out.println(word);
         }
-        
+
         List<String> text = new ArrayList<String>();
         for (Word word : result.subList(0, expResults.length)) {
             text.add(word.getText());
         }
-        
+
         assertArrayEquals(expResults, text.toArray());
     }
 
@@ -235,8 +242,8 @@ public class Tesseract1Test {
      */
     class Word {
 
-        private final String text;
-        private final float confidence;
+        private final String    text;
+        private final float     confidence;
         private final Rectangle rect;
 
         public Word(String text, float confidence, Rectangle rect) {
@@ -268,7 +275,8 @@ public class Tesseract1Test {
 
         @Override
         public String toString() {
-            return String.format("%s\t[Confidence: %f Bounding box: %d %d %d %d]", text, confidence, rect.x, rect.y, rect.width, rect.height);
+            return String.format("%s\t[Confidence: %f Bounding box: %d %d %d %d]", text, confidence, rect.x, rect.y,
+                    rect.width, rect.height);
         }
     }
 }
