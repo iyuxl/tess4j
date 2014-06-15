@@ -21,7 +21,11 @@ public class NativeSize extends IntegerType {
         this(0);
     }
 
-    /** Create a Size with the given value. */
+    /**
+     * Create a Size with the given value.
+     * 
+     * @param value
+     */
     public NativeSize(long value) {
         super(SIZE, value);
     }

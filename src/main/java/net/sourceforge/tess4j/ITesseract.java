@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.List;
+
 import javax.imageio.IIOImage;
 
 /**
@@ -40,7 +41,14 @@ public interface ITesseract {
      *
      * @param imageFile an image file
      * @return the recognized text
-     * @throws TesseractException
+     * @throws TesseractException If the image file &/ rectangle is null or not compatible with the types of images allowed by the class implementing this interface.
+     */
+    
+    /**
+     * 
+     * @param imageFile
+     * @return
+     * @throws TesseractException If the image file &/ rectangle is null or not compatible with the types of images allowed by the class implementing this interface.
      */
     String doOCR(File imageFile) throws TesseractException;
 
@@ -52,7 +60,7 @@ public interface ITesseract {
      * recognized. A rectangle of zero dimension or <code>null</code> indicates
      * the whole image.
      * @return the recognized text
-     * @throws TesseractException
+     * @throws TesseractException  If the image file &/ rectangle is null or not compatible with the types of images allowed by the class implementing this interface.
      */
     String doOCR(File imageFile, Rectangle rect) throws TesseractException;
 
@@ -61,7 +69,7 @@ public interface ITesseract {
      *
      * @param bi a buffered image
      * @return the recognized text
-     * @throws TesseractException
+     * @throws TesseractException If the buffered image is null or not compatible with the types of images allowed by the class implementing this interface.
      */
     String doOCR(BufferedImage bi) throws TesseractException;
 
@@ -73,7 +81,7 @@ public interface ITesseract {
      * recognized. A rectangle of zero dimension or <code>null</code> indicates
      * the whole image.
      * @return the recognized text
-     * @throws TesseractException
+     * @throws TesseractException If the buffered image &/ rectangle is null or not compatible with the types of images allowed by the class implementing this interface. 
      */
     String doOCR(BufferedImage bi, Rectangle rect) throws TesseractException;
 
@@ -85,7 +93,7 @@ public interface ITesseract {
      * recognized. A rectangle of zero dimension or <code>null</code> indicates
      * the whole image.
      * @return the recognized text
-     * @throws TesseractException
+     * @throws TesseractException If the image list &/ rectangle is null or not compatible with the types of images allowed by the class implementing this interface.
      */
     String doOCR(List<IIOImage> imageList, Rectangle rect) throws TesseractException;
 
@@ -103,7 +111,7 @@ public interface ITesseract {
      * @param bpp bits per pixel, represents the bit depth of the image, with 1
      * for binary bitmap, 8 for gray, and 24 for color RGB.
      * @return the recognized text
-     * @throws TesseractException
+     * @throws TesseractException If the byte buffer, rectangle &/ any other parameter passed is null or not compatible with the types of images allowed by the class implementing this interface.
      */
     String doOCR(int xsize, int ysize, ByteBuffer buf, Rectangle rect, int bpp) throws TesseractException;
 
