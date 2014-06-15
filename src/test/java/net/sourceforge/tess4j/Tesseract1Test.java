@@ -15,25 +15,31 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.vietocr.ImageHelper;
-import net.sourceforge.vietocr.ImageIOHelper;
-import com.recognition.software.jdeskew.ImageDeskew;
-import com.sun.jna.Pointer;
-import javax.imageio.ImageIO;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+
 import net.sourceforge.tess4j.util.Utils;
+import net.sourceforge.vietocr.ImageHelper;
+import net.sourceforge.vietocr.ImageIOHelper;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import com.recognition.software.jdeskew.ImageDeskew;
+import com.sun.jna.Pointer;
 
 public class Tesseract1Test {
 
@@ -66,6 +72,7 @@ public class Tesseract1Test {
 
     /**
      * Test of doOCR method, of class Tesseract1.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_File() throws Exception {
@@ -80,6 +87,7 @@ public class Tesseract1Test {
 
     /**
      * Test of doOCR method, of class Tesseract1.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_File_Rectangle() throws Exception {
@@ -95,6 +103,7 @@ public class Tesseract1Test {
 
     /**
      * Test of doOCR method, of class Tesseract1.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_List_Rectangle() throws Exception {
@@ -110,6 +119,7 @@ public class Tesseract1Test {
 
     /**
      * Test of doOCR method, of class Tesseract1.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_BufferedImage() throws Exception {
@@ -125,6 +135,7 @@ public class Tesseract1Test {
 
     /**
      * Test of deskew algorithm.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_SkewedImage() throws Exception {
@@ -146,6 +157,7 @@ public class Tesseract1Test {
 
     /**
      * Test of extending Tesseract1.
+     * @throws Exception while processing image.
      */
     @Test
     public void testExtendingTesseract1() throws Exception {
@@ -223,9 +235,9 @@ public class Tesseract1Test {
      */
     class Word {
 
-        private String text;
-        private float confidence;
-        private Rectangle rect;
+        private final String text;
+        private final float confidence;
+        private final Rectangle rect;
 
         public Word(String text, float confidence, Rectangle rect) {
             this.text = text;

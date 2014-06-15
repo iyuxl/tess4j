@@ -15,17 +15,42 @@
  */
 package net.sourceforge.vietocr;
 
-import java.io.*;
-import java.util.*;
-import javax.imageio.*;
-import javax.imageio.stream.*;
-import javax.imageio.metadata.*;
-import com.sun.media.imageio.plugins.tiff.*;
 import java.awt.Toolkit;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.metadata.IIOInvalidTreeException;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
+
 import org.w3c.dom.NodeList;
+
+import com.sun.media.imageio.plugins.tiff.BaselineTIFFTagSet;
+import com.sun.media.imageio.plugins.tiff.TIFFDirectory;
+import com.sun.media.imageio.plugins.tiff.TIFFField;
+import com.sun.media.imageio.plugins.tiff.TIFFImageWriteParam;
+import com.sun.media.imageio.plugins.tiff.TIFFTag;
 
 public class ImageIOHelper {
 
@@ -44,7 +69,7 @@ public class ImageIOHelper {
      * @param index an index of the page; -1 means all pages, as in a multi-page
      * TIFF image
      * @return a list of TIFF image files
-     * @throws Exception
+     * @throws IOException while processing files
      */
     public static List<File> createTiffFiles(File imageFile, int index) throws IOException {
         List<File> tiffFiles = new ArrayList<File>();
@@ -110,7 +135,7 @@ public class ImageIOHelper {
      * @param imageList a list of <code>IIOImage</code> objects
      * @param index an index of the page; -1 means all pages
      * @return a list of TIFF image files
-     * @throws Exception
+     * @throws IOException while processing files.
      */
     public static List<File> createTiffFiles(List<IIOImage> imageList, int index) throws IOException {
         return createTiffFiles(imageList, index, 0, 0);
@@ -260,7 +285,7 @@ public class ImageIOHelper {
      * formats, including TIFF, JPEG, GIF, PNG, BMP, JPEG, and PDF if GPL
      * Ghostscript is installed
      * @return a list of <code>IIOImage</code> objects
-     * @throws Exception
+     * @throws IOException while processing files.
      */
     public static List<IIOImage> getIIOImageList(File imageFile) throws IOException {
         File workingTiffFile = null;
@@ -338,7 +363,7 @@ public class ImageIOHelper {
      *
      * @param inputImages an array of image files
      * @param outputTiff the output TIFF file
-     * @throws Exception
+     * @throws IOException while processing files.
      */
     public static void mergeTiff(File[] inputImages, File outputTiff) throws IOException {
         List<IIOImage> imageList = new ArrayList<IIOImage>();
@@ -398,7 +423,7 @@ public class ImageIOHelper {
             int dpiX;
             if (nodes.getLength() > 0) {
                 float dpcWidth = Float.parseFloat(nodes.item(0).getAttributes().item(0).getNodeValue());
-                dpiX = (int) Math.round(25.4f / dpcWidth);
+                dpiX = Math.round(25.4f / dpcWidth);
             } else {
                 dpiX = Toolkit.getDefaultToolkit().getScreenResolution();
             }
@@ -408,7 +433,7 @@ public class ImageIOHelper {
             int dpiY;
             if (nodes.getLength() > 0) {
                 float dpcHeight = Float.parseFloat(nodes.item(0).getAttributes().item(0).getNodeValue());
-                dpiY = (int) Math.round(25.4f / dpcHeight);
+                dpiY = Math.round(25.4f / dpcHeight);
             } else {
                 dpiY = Toolkit.getDefaultToolkit().getScreenResolution();
             }

@@ -15,17 +15,26 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.vietocr.ImageHelper;
-import net.sourceforge.vietocr.ImageIOHelper;
-import com.recognition.software.jdeskew.ImageDeskew;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+import static org.junit.Assert.assertEquals;
+
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
+
 import javax.imageio.IIOImage;
-import org.junit.*;
-import static org.junit.Assert.*;
+import javax.imageio.ImageIO;
+
+import net.sourceforge.vietocr.ImageHelper;
+import net.sourceforge.vietocr.ImageIOHelper;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.recognition.software.jdeskew.ImageDeskew;
 
 public class TesseractTest {
     static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
@@ -57,6 +66,7 @@ public class TesseractTest {
 
     /**
      * Test of doOCR method, of class Tesseract.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_File() throws Exception {
@@ -71,6 +81,7 @@ public class TesseractTest {
 
     /**
      * Test of doOCR method, of class Tesseract.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_File_Rectangle() throws Exception {
@@ -86,6 +97,7 @@ public class TesseractTest {
 
     /**
      * Test of doOCR method, of class Tesseract.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_List_Rectangle() throws Exception {
@@ -101,6 +113,7 @@ public class TesseractTest {
 
     /**
      * Test of doOCR method, of class Tesseract.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_BufferedImage() throws Exception {
@@ -116,6 +129,7 @@ public class TesseractTest {
 
     /**
      * Test of deskew algorithm.
+     * @throws Exception while processing image.
      */
     @Test
     public void testDoOCR_SkewedImage() throws Exception {

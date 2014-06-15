@@ -15,10 +15,19 @@
  */
 package net.sourceforge.vietocr;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
-import org.ghost4j.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.ghost4j.Ghostscript;
+import org.ghost4j.GhostscriptException;
 
 public class PdfUtilities {
 
@@ -31,6 +40,7 @@ public class PdfUtilities {
      *
      * @param inputPdfFile
      * @return a multi-page TIFF image
+     * @throws IOException while processing files.
      */
     public static File convertPdf2Tiff(File inputPdfFile) throws IOException  {
         File[] pngFiles = null;
