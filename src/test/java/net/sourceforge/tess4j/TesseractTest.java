@@ -15,23 +15,19 @@
  */
 package net.sourceforge.tess4j;
 
-import net.sourceforge.tess4j.util.ImageHelper;
-import net.sourceforge.tess4j.util.ImageIOHelper;
+import net.sourceforge.vietocr.ImageHelper;
+import net.sourceforge.vietocr.ImageIOHelper;
 import com.recognition.software.jdeskew.ImageDeskew;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.imageio.IIOImage;
-import net.sourceforge.tess4j.ITesseract.RenderedFormat;
 import org.junit.*;
 import static org.junit.Assert.*;
 
 public class TesseractTest {
-
     static final double MINIMUM_DESKEW_THRESHOLD = 0.05d;
     Tesseract instance;
 
@@ -92,7 +88,7 @@ public class TesseractTest {
      * Test of doOCR method, of class Tesseract.
      */
     @Test
-    public void testDoOCR_PDF() throws Exception {
+    public void testDoOCR_List_Rectangle() throws Exception {
         System.out.println("doOCR on a PDF document");
         String filename = String.format("%s/%s", this.testResourcesDataPath, "eurotext.pdf");
         File imageFile = new File(filename);
@@ -137,20 +133,5 @@ public class TesseractTest {
         String result = instance.doOCR(bi);
         System.out.println(result);
         assertEquals(expResult, result.substring(0, expResult.length()));
-    }
-
-    /**
-     * Test of createDocuments method, of class Tesseract.
-     */
-    @Test
-    public void testCreateDocuments() throws Exception {
-        System.out.println("createDocuments for image");
-        String imageFile1 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.pdf");
-        String imageFile2 = String.format("%s/%s", this.testResourcesDataPath, "eurotext.png");
-        String outputbase1 = "target/test-classes/test-results/docrenderer";
-        String outputbase2 = "target/test-classes/test-results/docrenderer2";
-        List<RenderedFormat> formats = new ArrayList<RenderedFormat>(Arrays.asList(RenderedFormat.HOCR, RenderedFormat.PDF, RenderedFormat.TEXT));
-        instance.createDocuments(new String[]{imageFile1, imageFile2}, new String[]{outputbase1, outputbase2}, formats);
-        assertTrue(new File(outputbase1 + ".pdf").exists());
     }
 }
