@@ -679,7 +679,7 @@ public interface TessAPI extends Library {
      * the output is kept internally until the next <code>SetImage</code>.
      * 
      * @param handle the TesseractAPI instance
-     * @param monitor eanycode char representing the monitor status
+     * @param monitor the result as Tesseract internal structures
      * @return 0 on success
      */
     int TessBaseAPIRecognize(TessAPI.TessBaseAPI handle, TessAPI.ETEXT_DESC monitor);
@@ -688,7 +688,7 @@ public interface TessAPI extends Library {
      * Variant on Recognize used for testing chopper.
      * 
      * @param handle the TesseractAPI instance
-     * @param monitor eanycode char representing the monitor status
+     * @param monitor the result as Tesseract internal structures
      * @return api status
      */
     int TessBaseAPIRecognizeForChopTest(TessAPI.TessBaseAPI handle, TessAPI.ETEXT_DESC monitor);
@@ -1006,6 +1006,13 @@ public interface TessAPI extends Library {
      */
     int TessResultIteratorSymbolIsDropcap(TessAPI.TessResultIterator handle);
 
+    /**
+     * Base class for all tesseract APIs. Specific classes can add ability to
+     * work on different inputs or produce different outputs. This class is
+     * mostly an interface layer on top of the Tesseract instance class to hide
+     * the data types so that users of this class don't have to include any
+     * other Tesseract headers.
+     */
     public static class TessBaseAPI extends PointerType {
 
         public TessBaseAPI(Pointer address) {
@@ -1017,6 +1024,18 @@ public interface TessAPI extends Library {
         }
     };
 
+    /**
+     * Description of the output of the OCR engine. This structure is used as
+     * both a progress monitor and the final output header, since it needs to be
+     * a valid progress monitor while the OCR engine is storing its output to
+     * shared memory. During progress, all the buffer info is -1. Progress
+     * starts at 0 and increases to 100 during OCR. No other constraint. Every
+     * progress callback, the OCR engine must set <code>ocr_alive</code> to 1.
+     * The HP side will set <code>ocr_alive</code> to 0. Repeated failure to
+     * reset to 1 indicates that the OCR engine is dead. If the cancel function
+     * is not null then it is called with the number of user words found. If it
+     * returns true then operation is cancelled.
+     */
     public static class ETEXT_DESC extends PointerType {
 
         public ETEXT_DESC(Pointer address) {
@@ -1028,6 +1047,21 @@ public interface TessAPI extends Library {
         }
     };
 
+    /**
+     * Class to iterate over tesseract page structure, providing access to all
+     * levels of the page hierarchy, without including any tesseract headers or
+     * having to handle any tesseract structures.<br>
+     * WARNING! This class points to data held within the TessBaseAPI class, and
+     * therefore can only be used while the TessBaseAPI class still exists and
+     * has not been subjected to a call of <code>Init</code>,
+     * <code>SetImage</code>, <code>Recognize</code>, <code>Clear</code>,
+     * <code>End</code> <code>DetectOS</code>, or anything else that changes the
+     * internal <code>PAGE_RES</code>. See <code>apitypes.h</code> for the
+     * definition of <code>PageIteratorLevel</code>. See also
+     * <code>ResultIterator</code>, derived from <code>PageIterator</code>,
+     * which adds in the ability to access OCR output with text-specific
+     * methods.
+     */
     public static class TessPageIterator extends PointerType {
 
         public TessPageIterator(Pointer address) {
@@ -1039,6 +1073,9 @@ public interface TessAPI extends Library {
         }
     };
 
+    /**
+     * MutableIterator adds access to internal data structures.
+     */
     public static class TessMutableIterator extends PointerType {
 
         public TessMutableIterator(Pointer address) {
@@ -1050,6 +1087,11 @@ public interface TessAPI extends Library {
         }
     };
 
+    /**
+     * Iterator for tesseract results that is capable of iterating in proper
+     * reading order over Bi Directional (e.g. mixed Hebrew and English) text.
+     * ResultIterator adds text-specific methods for access to OCR output.
+     */
     public static class TessResultIterator extends PointerType {
 
         public TessResultIterator(Pointer address) {
