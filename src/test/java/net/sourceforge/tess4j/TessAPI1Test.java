@@ -343,6 +343,7 @@ public class TessAPI1Test {
         int height = 0;
         int bytes_per_pixel = 0;
         int bytes_per_line = 0;
+        TessAPI1.TessBaseAPIInit3(handle, datapath, language);
         TessAPI1.TessBaseAPISetImage(handle, imagedata, width, height, bytes_per_pixel, bytes_per_line);
     }
 
